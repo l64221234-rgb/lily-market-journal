@@ -11,4 +11,99 @@ body{background-image:radial-gradient(#e8dccc 0.7px,transparent 0.7px);backgroun
 .sectiontitle h2{font-family:Georgia,'Noto Serif TC',serif;color:#66584b}
 .notice{background:#fff9ef;border-left-color:#9aa6b0} .tag{background:#f6e8d7}
 @media(max-width:480px){main{padding:12px 13px 70px}.mast{padding:27px 16px 20px}.mast h1{font-size:40px}.hero{padding:20px 15px}.actions .btn{flex:1}}
-</style></head><body><main><header class="mast"><div class="eyebrow">LILY'S PERSONAL PRICE ARCHIVE · 2026</div><h1>Market<br>Scrapbook.</h1><p>我的日常採買手帖　/　分類・月份・價格比較</p><span class="stamp">KEEP THE GOOD FINDS</span></header><section class="hero"><div class="eyebrow">01 / QUICK CAPTURE</div><h2>拍張收據，留下好價格。</h2><p>用手機拍照或選取照片。正式的 AI 自動解析需要連接雲端服務；這個版本先讓你拍照、保存待處理收據，避免誤以為已完成辨識。</p><div class="actions"><button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button><button class="btn secondary" id="manualBtn">手動補一筆</button></div><input type="file" id="photo" accept="image/*" capture="environment" hidden><img id="preview" class="preview" alt="收據預覽"><p id="photoStatus" class="tiny"></p></section><section><div class="sectiontitle"><h2>PRICE FINDER / 商品比價</h2><span>只比對已確認資料</span></div><div class="filters"><input id="search" class="wide" placeholder="搜尋商品、品牌或條碼"><select id="month"><option value="">所有月份</option></select><select id="category"><option value="">所有分類</option></select><select id="store"><option value="">所有店家</option><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option></select></div><div id="results" class="cards"></div></section><section><div class="sectiontitle"><h2>ARCHIVE / 我的資料</h2><span>匯出備份</span></div><div class="notice">本機版資料只儲存在目前瀏覽器，手機換裝置不會同步。照片可能很大，因此本版不會把原圖塞進瀏覽器儲存空間。請保留收據照片；待雲端版完成後才能實現「拍照 → AI 解析 → 核對 → 雲端歸檔」。</div><div class="actions"><button class="btn secondary" id="export">匯出 JSON 備份</button><button class="btn secondary" id="import">匯入 JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="tiny" id="count"></p></section><footer>MARKET SCRAPBOOK · 個人價格資料庫 · 未確認品項不自動歸檔</footer></main><dialog id="editor"><h2>新增已確認商品</h2><form method="dialog" id="form"><label>商品名稱 *</label><input id="name" required><label>日期 *</label><input id="date" type="date" required><label>店家 *</label><select id="editStore"><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option></select><label>分類 *</label><select id="editCategory"></select><label>規格</label><input id="spec" placeholder="例如 500ml"><label>條碼</label><input id="barcode" placeholder="可留空"><label>單價 NT$ *</label><input id="amount" type="number" min="0" step="0.01" required><label>數量 *</label><input id="qty" type="number" min="1" value="1" required><div class="actions" style="margin-top:20px"><button class="btn red" type="submit">確認儲存</button><button class="btn secondary" type="button" id="cancel">取消</button></div></form></dialog><script>const cats=['肉品','海鮮','蔬菜水果','咖啡／飲料','餅乾零食','乳製品','冷凍食品','調味料','日用品','其他'];const key='lily-market-scrapbook-v1';let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]');if(!Array.isArray(items))items=[]}catch{}const $=id=>document.getElementById(id);for(const c of cats){for(const id of ['category','editCategory']){let o=document.createElement('option');o.value=o.textContent=c;$(id).append(o)}}function save(){localStorage.setItem(key,JSON.stringify(items));render()}function render(){const months=[...new Set(items.map(x=>x.date?.slice(0,7)).filter(Boolean))].sort().reverse(),selected=$('month').value;$('month').innerHTML='<option value="">所有月份</option>';months.forEach(m=>{const o=document.createElement('option');o.value=o.textContent=m;$('month').append(o)});$('month').value=selected;const q=$('search').value.toLowerCase(),f=items.filter(x=>(!q||[x.name,x.barcode,x.spec].join(' ').toLowerCase().includes(q))&&(!$('month').value||x.date.startsWith($('month').value))&&(!$('category').value||x.category===$('category').value)&&(!$('store').value||x.store===$('store').value));const root=$('results');root.replaceChildren();if(!f.length){root.innerHTML='<div class="empty">這個條件下還沒有已確認的商品紀錄。<br>已提供的 13 張收據仍待逐項匯入。</div>'}else f.sort((a,b)=>b.date.localeCompare(a.date)).forEach(x=>{let e=document.createElement('article');e.className='item';const h=document.createElement('h3');h.textContent=x.name;const meta=document.createElement('div');meta.className='meta';meta.textContent=[x.date,x.store,x.spec].filter(Boolean).join(' · ');const p=document.createElement('div');p.className='row';const left=document.createElement('span');left.className='tag';left.textContent=x.category;const right=document.createElement('span');right.className='price';right.textContent='NT$'+x.amount;p.append(left,right);e.append(h,meta,p);root.append(e)});$('count').textContent=`已確認商品紀錄：${items.length} 筆`}$('cameraBtn').onclick=()=>$('photo').click();$('photo').onchange=e=>{const f=e.target.files?.[0];if(!f)return;const url=URL.createObjectURL(f);$('preview').src=url;$('preview').style.display='block';$('photoStatus').textContent='照片已選取，但尚未進行 AI 解析，也沒有上傳到雲端。請先保留原始照片。';};$('manualBtn').onclick=()=>$('editor').showModal();$('cancel').onclick=()=>$('editor').close();$('form').onsubmit=e=>{e.preventDefault();items.push({name:$('name').value.trim(),date:$('date').value,store:$('editStore').value,category:$('editCategory').value,spec:$('spec').value.trim(),barcode:$('barcode').value.trim(),amount:Number($('amount').value),qty:Number($('qty').value)});save();$('editor').close();$('form').reset()};for(const id of ['search','month','category','store'])$(id).addEventListener(id==='search'?'input':'change',render);$('export').onclick=()=>{const blob=new Blob([JSON.stringify({version:1,items},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='lily-market-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)};$('import').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{try{const data=JSON.parse(await e.target.files[0].text());if(!Array.isArray(data.items))throw Error('格式錯誤');if(!confirm('匯入會取代目前商品資料，請先備份。確定嗎？'))return;items=data.items;save()}catch(err){alert('無法匯入：'+err.message)}};render();</script></body></html>
+.cloud{background:#fffaf2;border:1px solid var(--line);padding:20px;margin:22px 0}.cloud h2{margin:0 0 8px}.cloud .status{color:#95684d;font-size:13px}.cloudgrid{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}.smallbtn{font-size:12px;padding:8px 10px}.item .actions{margin-top:10px}.item .actions button{font-size:12px;padding:7px 10px}@media(min-width:650px){.cloudgrid{grid-template-columns:1fr 1fr}}</style></head><body><main><header class="mast"><div class="eyebrow">LILY'S PERSONAL PRICE ARCHIVE · 2026</div><h1>Market<br>Scrapbook.</h1><p>我的日常採買手帖　/　分類・月份・價格比較</p><span class="stamp">KEEP THE GOOD FINDS</span></header><section class="cloud"><div class="eyebrow">CLOUD / 雲端同步</div><h2>我的私人價格資料庫</h2><p id="cloudStatus" class="status">尚未連線，請填入 Supabase 公開連線設定。</p><div class="cloudgrid"><div><label>Supabase Project URL</label><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co"></div><div><label>Supabase publishable key（公開金鑰）</label><input id="supabaseKey" placeholder="sb_publishable_..."></div></div><div class="actions"><button class="btn secondary" id="connectBtn">儲存連線設定</button><button class="btn red" id="loginBtn">使用 GitHub 登入</button><button class="btn secondary" id="logoutBtn" hidden>登出</button><button class="btn secondary" id="syncBtn">重新同步</button></div><p class="tiny">僅使用 publishable / anon key，絕對不要填入 secret 或 service_role key。登入後資料才會儲存至 Supabase。</p></section><section class="hero"><div class="eyebrow">01 / QUICK CAPTURE</div><h2>拍張收據，留下好價格。</h2><p>用手機拍照或選取照片。正式的 AI 自動解析需要連接雲端服務；這個版本先讓你拍照、保存待處理收據，避免誤以為已完成辨識。</p><div class="actions"><button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button><button class="btn secondary" id="manualBtn">手動補一筆</button></div><input type="file" id="photo" accept="image/*" capture="environment" hidden><img id="preview" class="preview" alt="收據預覽"><p id="photoStatus" class="tiny"></p></section><section><div class="sectiontitle"><h2>PRICE FINDER / 商品比價</h2><span>只比對已確認資料</span></div><div class="filters"><input id="search" class="wide" placeholder="搜尋商品、品牌或條碼"><select id="month"><option value="">所有月份</option></select><select id="category"><option value="">所有分類</option></select><select id="store"><option value="">所有店家</option><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select></div><div id="results" class="cards"></div></section><section><div class="sectiontitle"><h2>ARCHIVE / 我的資料</h2><span>匯出備份</span></div><div class="notice">登入 GitHub 後，已確認的商品紀錄會同步至 Supabase。未登入時可瀏覽本機既有紀錄，但無法新增雲端資料。收據照片尚未支援雲端上傳與 AI 辨識，請保留原圖。</div><div class="actions"><button class="btn secondary" id="export">匯出 JSON 備份</button><button class="btn secondary" id="import">匯入 JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="tiny" id="count"></p></section><footer>MARKET SCRAPBOOK · 個人價格資料庫 · 未確認品項不自動歸檔</footer></main><dialog id="editor"><h2 id="editorTitle">新增已確認商品</h2><form method="dialog" id="form"><label>商品名稱 *</label><input id="name" required><label>日期 *</label><input id="date" type="date" required><label>店家 *</label><select id="editStore"><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select><label>分類 *</label><select id="editCategory"></select><label>規格</label><input id="spec" placeholder="例如 500ml"><label>條碼</label><input id="barcode" placeholder="可留空"><label>單價 NT$ *</label><input id="amount" type="number" min="0" step="0.01" required><label>數量 *</label><input id="qty" type="number" min="1" value="1" required><div class="actions" style="margin-top:20px"><button class="btn red" type="submit">確認儲存</button><button class="btn secondary" type="button" id="cancel">取消</button></div></form></dialog>
+const $=id=>document.getElementById(id);
+const cats=['肉品','海鮮','蔬菜水果','咖啡／飲料','餅乾零食','乳製品','冷凍食品','調味料','日用品','其他'];
+const localKey='lily-market-scrapbook-v1',configKey='lily-market-cloud-config-v1';
+let items=[],client=null,user=null,editingId=null;
+try{items=JSON.parse(localStorage.getItem(localKey)||'[]');if(!Array.isArray(items))items=[]}catch{items=[]}
+for(const c of cats){for(const id of ['category','editCategory']){const o=document.createElement('option');o.value=o.textContent=c;$(id).append(o)}}
+function status(s){$('cloudStatus').textContent=s}
+function configure(){
+ const url=$('supabaseUrl').value.trim().replace(/\/+$/,'');
+ const key=$('supabaseKey').value.trim();
+ if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key){status('請確認 Project URL 與 publishable key 都已正確填入。');return false}
+ if(!window.supabase){status('Supabase 程式庫載入失敗，請確認網路連線後重新整理。');return false}
+ client=window.supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ localStorage.setItem(configKey,JSON.stringify({url,key}));
+ return true;
+}
+async function authRefresh(){
+ if(!client)return;
+ const {data,error}=await client.auth.getUser();
+ user=error?null:data.user;
+ $('loginBtn').hidden=!!user;$('logoutBtn').hidden=!user;
+ if(user){status('已登入 GitHub／Supabase：'+(user.email||user.id));await sync()}
+ else {status('已儲存連線設定，尚未登入 GitHub；目前顯示本機資料。');render()}
+}
+$('connectBtn').onclick=async()=>{if(configure())await authRefresh()};
+$('loginBtn').onclick=async()=>{
+ if(!client&&!configure())return;
+ const {error}=await client.auth.signInWithOAuth({provider:'github',options:{redirectTo:location.origin+location.pathname}});
+ if(error)status('登入失敗：'+error.message);
+};
+$('logoutBtn').onclick=async()=>{if(client){await client.auth.signOut();user=null;status('已登出；目前顯示本機資料。');$('loginBtn').hidden=false;$('logoutBtn').hidden=true;items=JSON.parse(localStorage.getItem(localKey)||'[]');render()}};
+$('syncBtn').onclick=async()=>{if(!client||!user){status('請先完成 GitHub 登入。');return}await sync()};
+async function sync(){
+ const {data,error}=await client.from('market_items').select('*').order('date',{ascending:false});
+ if(error){status('雲端讀取失敗：'+error.message);return}
+ items=data||[];render();status('雲端同步完成，已登入：'+(user.email||'GitHub 帳號')+'；共 '+items.length+' 筆');
+}
+function render(){
+ const months=[...new Set(items.map(x=>x.date?.slice(0,7)).filter(Boolean))].sort().reverse(),selected=$('month').value;
+ $('month').replaceChildren(new Option('所有月份',''));months.forEach(m=>$('month').add(new Option(m,m)));$('month').value=months.includes(selected)?selected:'';
+ const q=$('search').value.toLowerCase();
+ const f=items.filter(x=>(!q||[x.name,x.barcode,x.spec,x.store,x.category].join(' ').toLowerCase().includes(q))&&(!$('month').value||x.date?.startsWith($('month').value))&&(!$('category').value||x.category===$('category').value)&&(!$('store').value||x.store===$('store').value));
+ const root=$('results');root.replaceChildren();
+ if(!f.length){const empty=document.createElement('div');empty.className='empty';empty.textContent='目前沒有符合條件的已確認商品紀錄。先前的 13 張收據尚未逐項匯入。';root.append(empty)}
+ else f.sort((a,b)=>(b.date||'').localeCompare(a.date||'')).forEach(x=>{
+  const e=document.createElement('article');e.className='item';
+  const h=document.createElement('h3');h.textContent=x.name;
+  const meta=document.createElement('div');meta.className='meta';meta.textContent=[x.date,x.store,x.spec,x.qty?'數量 '+x.qty:''].filter(Boolean).join(' · ');
+  const p=document.createElement('div');p.className='row';
+  const left=document.createElement('span');left.className='tag';left.textContent=x.category;
+  const right=document.createElement('span');right.className='price';right.textContent='NT$'+Number(x.amount).toLocaleString('zh-TW');
+  p.append(left,right);e.append(h,meta,p);
+  if(user){const actions=document.createElement('div');actions.className='actions';
+   const edit=document.createElement('button');edit.className='btn secondary';edit.textContent='修改';edit.onclick=()=>openEditor(x);
+   const del=document.createElement('button');del.className='btn secondary';del.textContent='刪除';del.onclick=()=>removeItem(x);
+   actions.append(edit,del);e.append(actions)}
+  root.append(e)
+ });
+ $('count').textContent='已確認商品紀錄：'+items.length+' 筆'+(user?'（Supabase 雲端）':'（本機）');
+}
+function openEditor(x=null){
+ if(!user){alert('請先使用 GitHub 登入，才能新增或修改雲端商品。');return}
+ editingId=x?.id||null;$('editorTitle').textContent=x?'修改已確認商品':'新增已確認商品';
+ $('form').reset();$('date').value=x?.date||new Date().toLocaleDateString('en-CA');
+ for(const field of ['name','spec','barcode','amount','qty'])if(x)$(field).value=x[field]??'';
+ if(x){$('editStore').value=x.store;$('editCategory').value=x.category}
+ $('editor').showModal();
+}
+$('manualBtn').onclick=()=>openEditor();
+$('cancel').onclick=()=>$('editor').close();
+$('form').onsubmit=async e=>{
+ e.preventDefault();if(!user||!client)return;
+ const record={name:$('name').value.trim(),date:$('date').value,store:$('editStore').value,category:$('editCategory').value,spec:$('spec').value.trim(),barcode:$('barcode').value.trim(),amount:Number($('amount').value),qty:Number($('qty').value),user_id:user.id};
+ if(!record.name||!record.date||!record.store||!Number.isFinite(record.amount)||record.amount<0||!Number.isInteger(record.qty)||record.qty<1){alert('請確認必填欄位、金額及數量。');return}
+ const response=editingId?await client.from('market_items').update(record).eq('id',editingId).eq('user_id',user.id):await client.from('market_items').insert(record);
+ if(response.error){alert('儲存失敗：'+response.error.message);return}
+ $('editor').close();await sync();
+};
+async function removeItem(x){if(!confirm('確定刪除「'+x.name+'」？此操作會刪除雲端紀錄。'))return;
+ const {error}=await client.from('market_items').delete().eq('id',x.id).eq('user_id',user.id);
+ if(error)alert('刪除失敗：'+error.message);else await sync();
+}
+for(const id of ['search','month','category','store'])$(id).addEventListener(id==='search'?'input':'change',render);
+$('cameraBtn').onclick=()=>$('photo').click();
+$('photo').onchange=e=>{const f=e.target.files?.[0];if(!f)return;const url=URL.createObjectURL(f);$('preview').src=url;$('preview').style.display='block';$('photoStatus').textContent='照片僅供預覽，尚未進行 AI 解析或雲端上傳，請保留原圖。'};
+$('export').onclick=()=>{const blob=new Blob([JSON.stringify({version:2,items},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='lily-market-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)};
+$('import').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{try{const data=JSON.parse(await e.target.files[0].text());if(!Array.isArray(data.items))throw Error('格式錯誤');if(!user||!client){alert('請先登入 GitHub 才能匯入雲端。');return}
+ if(!confirm('將備份資料新增至雲端（不會清除現有紀錄），可能產生重複資料。確定嗎？'))return;
+ const clean=data.items.map(x=>({user_id:user.id,name:String(x.name||'').trim(),date:x.date,store:x.store,category:x.category||'其他',spec:x.spec||'',barcode:x.barcode||'',amount:Number(x.amount),qty:Number(x.qty)||1}));
+ if(clean.some(x=>!x.name||!x.date||!x.store||!Number.isFinite(x.amount)||x.amount<0))throw Error('備份含無效商品資料');
+ const {error}=await client.from('market_items').insert(clean);if(error)throw error;await sync();alert('已匯入 '+clean.length+' 筆');
+ }catch(err){alert('無法匯入：'+err.message)}finally{e.target.value=''}};
+(async()=>{try{const saved=JSON.parse(localStorage.getItem(configKey)||'null');if(saved){$('supabaseUrl').value=saved.url||'';$('supabaseKey').value=saved.key||'';if(configure())await authRefresh()}else render()}catch(err){status('初始化失敗：'+err.message);render()}})();
+</script></body></html>
