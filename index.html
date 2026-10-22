@@ -18,6 +18,8 @@ body{background-image:radial-gradient(#e8dccc 0.7px,transparent 0.7px);backgroun
 const $=id=>document.getElementById(id);
 const cats=['肉品','海鮮','蔬菜水果','咖啡／飲料','餅乾零食','乳製品','冷凍食品','調味料','日用品','其他'];
 const localKey='lily-market-scrapbook-v1',configKey='lily-market-cloud-config-v1';
+const DEFAULT_SUPABASE_URL='https://jwthexumznuikztttujx.supabase.co';
+const DEFAULT_SUPABASE_KEY='sb_publishable_B53YJTB5S0LfpsFAmaTKDQ_U8DoL51H';
 let items=[],client=null,user=null,editingId=null;
 try{items=JSON.parse(localStorage.getItem(localKey)||'[]');if(!Array.isArray(items))items=[]}catch{items=[]}
 for(const c of cats){for(const id of ['category','editCategory']){const o=document.createElement('option');o.value=o.textContent=c;$(id).append(o)}}
@@ -152,7 +154,23 @@ $('importFile').onchange=async e=>{try{const data=JSON.parse(await e.target.file
  if(clean.some(x=>!x.name||!x.date||!x.store||!Number.isFinite(x.amount)||x.amount<0))throw Error('備份含無效商品資料');
  const {error}=await client.from('market_items').insert(clean);if(error)throw error;await sync();alert('已匯入 '+clean.length+' 筆');
  }catch(err){alert('無法匯入：'+err.message)}finally{e.target.value=''}};
-(async()=>{try{const saved=JSON.parse(localStorage.getItem(configKey)||'null');if(saved){$('supabaseUrl').value=saved.url||'';$('supabaseKey').value=saved.key||'';if(configure())await authRefresh()}else render()}catch(err){status('初始化失敗：'+err.message);render()}})();
+(async()=>{
+  try {
+    const saved = JSON.parse(localStorage.getItem(configKey) || 'null');
+
+    $('supabaseUrl').value = DEFAULT_SUPABASE_URL;
+    $('supabaseKey').value = DEFAULT_SUPABASE_KEY;
+
+    if (configure()) {
+      await authRefresh();
+    } else {
+      render();
+    }
+  } catch (err) {
+    status('初始化失敗：' + err.message);
+    render();
+  }
+})();
 </script>
 <script src="./market-ai.js"></script>
 </body>
