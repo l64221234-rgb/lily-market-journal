@@ -141,7 +141,7 @@ async function loadReceipts(){
   const signed=await client.storage.from('market-receipts').createSignedUrl(r.storage_path,3600);
   if(!signed.error&&signed.data?.signedUrl){img.src=signed.data.signedUrl;img.onclick=()=>showReceipt(img.src)};
   const content=document.createElement('div');const meta=document.createElement('div');meta.className='meta';meta.textContent=(r.original_name||'收據')+' · '+new Date(r.created_at).toLocaleString('zh-TW')+' · '+(r.status==='reviewed'?'已人工標記完成':'待核對');
-  const note=document.createElement('div');note.className='tiny';note.textContent='照片已儲存；商品價格尚未自動辨識。';
+  const note=document.createElement('div');note.className='tiny';note.textContent=r.status==='reviewed'?'已人工標記完成（舊版收據）；原有商品資料已保留。':'收據照片已儲存；請使用 AI 辨識並核對商品。';
   const acts=document.createElement('div');acts.className='actions';
   const add=document.createElement('button');add.className='btn red';add.textContent='依收據新增商品';add.onclick=()=>{activeReceiptId=r.id;openEditor();$('editorTitle').textContent='依收據新增已確認商品'};
   const toggle=document.createElement('button');toggle.className='btn secondary';toggle.textContent=r.status==='reviewed'?'標回待整理':'標記已核對';toggle.onclick=async()=>{if(r.status!=='reviewed'&&!confirm('請確認已逐項核對收據內容。這只更改收據狀態，不會自動新增商品。'))return;const {error}=await client.from('market_receipts').update({status:r.status==='reviewed'?'pending':'reviewed'}).eq('id',r.id).eq('user_id',user.id);if(error)alert(error.message);else await loadReceipts()};
