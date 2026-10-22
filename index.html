@@ -153,4 +153,7 @@ $('importFile').onchange=async e=>{try{const data=JSON.parse(await e.target.file
  const {error}=await client.from('market_items').insert(clean);if(error)throw error;await sync();alert('已匯入 '+clean.length+' 筆');
  }catch(err){alert('無法匯入：'+err.message)}finally{e.target.value=''}};
 (async()=>{try{const saved=JSON.parse(localStorage.getItem(configKey)||'null');if(saved){$('supabaseUrl').value=saved.url||'';$('supabaseKey').value=saved.key||'';if(configure())await authRefresh()}else render()}catch(err){status('初始化失敗：'+err.message);render()}})();
-</script></body></html>
+</script>
+<script src="./market-ai.js"></script>
+</body>
+</html>
