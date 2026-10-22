@@ -45,6 +45,22 @@ $('aiSave').onclick=async()=>{if(!active||saving)return;saving=true;const btn=$(
  await sync();await refreshCardProgress(a.r.id);paint();const p=progress(a.lines);$('aiReviewStatus').textContent=`本次已匯入 ${done} 項；目前 ${p.imported}/${p.total} 項已匯入，${p.pending} 項待處理。`;
  }catch(e){$('aiReviewStatus').textContent='匯入中斷：'+(e.message||String(e))+'。已成功的項目不會因重試而重複新增；請重新開啟核對清單。'}finally{saving=false;btn.disabled=false}};
 $('aiClose').onclick=()=>{if(saving)return;if(active&&active.rows.some(x=>x.line.status!=='imported')&&!confirm('未按「儲存修改」的文字變更可能遺失。確定關閉？'))return;dlg.close()};
-async function refreshCardProgress(receiptId){if(!client||!user)return;try{const lines=await loadLines(receiptId);const cards=[...$('receiptList').querySelectorAll('.receipt-card')];const receipts=receiptRecords||[];for(let i=0;i<cards.length;i++){if(receipts[i]?.id!==receiptId)continue;const card=cards[i];let node=card.querySelector('.aiProgressLabel');if(!node){node=el('div',{class:'tiny aiProgressLabel'});card.querySelector('.meta')?.after(node)}if(lines.length){const p=progress(lines);node.textContent=`AI 清單：已匯入 ${p.imported}/${p.total} 項｜待處理 ${p.pending} 項｜略過 ${p.skipped} 項${p.pending===0?'｜清單已處理完畢':''}`;}else node.textContent='尚未建立 AI 逐項清單（舊版已匯入的商品不會自動歸屬到這張收據）';}}catch(e){console.warn('AI progress:',e.message)}}
-const root=$('receiptList');if(!root)return;let busy=false;const observer=new MutationObserver(()=>{if(busy)return;busy=true;try{const cards=[...root.querySelectorAll('.receipt-card')],receipts=receiptRecords||[];cards.forEach((card,i)=>{const r=receipts[i];if(!r)return;const actions=card.querySelector('.actions');if(!actions||card.querySelector('.aiAnalyze'))return;const analyze=el('button',{class:'btn red aiAnalyze',type:'button'},'AI 辨識收據');analyze.onclick=()=>analyzeReceipt(r,analyze);const review=el('button',{class:'btn secondary aiContinue',type:'button'},'繼續核對');review.onclick=()=>openReceipt(r);actions.prepend(analyze,review);refreshCardProgress(r.id)})}finally{busy=false}});observer.observe(root,{childList:true,subtree:true});
+async function refreshCardProgress(receiptId){if(!client||!user)return;try{const lines=await loadLines(receiptId);const cards=[...$('receiptList').querySelectorAll('.receipt-card')];const receipts=receiptRecords||[];for(let i=0;i<cards.length;i++){if(receipts[i]?.id!==receiptId)continue;const card=cards[i];let node=card.querySelector('.aiProgressLabel');if(!node){node=el('div',{class:'tiny aiProgressLabel'});card.querySelector('.meta')?.after(node)}updateLegacyReceiptCard(card, receipts[i], lines);
+if(lines.length){const p=progress(lines);node.textContent=`AI 清單：已匯入 ${p.imported}/${p.total} 項｜待處理 ${p.pending} 項｜略過 ${p.skipped} 項${p.pending===0?'｜清單已處理完畢':''}`;}else node.textContent='尚未建立 AI 逐項清單（舊版已匯入的商品不會自動歸屬到這張收據）';}}catch(e){console.warn('AI progress:',e.message)}}
+function isCompletedLegacyReceipt(r, lines) {
+  return r?.status === 'reviewed' && lines.length === 0;
+}
+
+function updateLegacyReceiptCard(card, r, lines) {
+  const legacyCompleted = isCompletedLegacyReceipt(r, lines);
+
+  const analyzeButton = card.querySelector('.aiAnalyze');
+  const continueButton = card.querySelector('.aiContinue');
+  const progressLabel = card.querySelector('.aiProgressLabel');
+
+if (analyzeButton) analyzeButton.style.display = legacyCompleted ? 'none' : '';
+if (continueButton) continueButton.style.display = legacyCompleted ? 'none' : '';
+if (progressLabel) progressLabel.style.display = legacyCompleted ? 'none' : '';
+}
+ const root=$('receiptList');if(!root)return;let busy=false;const observer=new MutationObserver(()=>{if(busy)return;busy=true;try{const cards=[...root.querySelectorAll('.receipt-card')],receipts=receiptRecords||[];cards.forEach((card,i)=>{const r=receipts[i];if(!r)return;const actions=card.querySelector('.actions');if(!actions||card.querySelector('.aiAnalyze'))return;const analyze=el('button',{class:'btn red aiAnalyze',type:'button'},'AI 辨識收據');analyze.onclick=()=>analyzeReceipt(r,analyze);const review=el('button',{class:'btn secondary aiContinue',type:'button'},'繼續核對');review.onclick=()=>openReceipt(r);actions.prepend(analyze,review);refreshCardProgress(r.id)})}finally{busy=false}});observer.observe(root,{childList:true,subtree:true});
 })();
