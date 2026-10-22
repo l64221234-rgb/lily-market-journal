@@ -11,7 +11,9 @@ body{background-image:radial-gradient(#e8dccc 0.7px,transparent 0.7px);backgroun
 .sectiontitle h2{font-family:Georgia,'Noto Serif TC',serif;color:#66584b}
 .notice{background:#fff9ef;border-left-color:#9aa6b0} .tag{background:#f6e8d7}
 @media(max-width:480px){main{padding:12px 13px 70px}.mast{padding:27px 16px 20px}.mast h1{font-size:40px}.hero{padding:20px 15px}.actions .btn{flex:1}}
-.cloud{background:#fffaf2;border:1px solid var(--line);padding:20px;margin:22px 0}.cloud h2{margin:0 0 8px}.cloud .status{color:#95684d;font-size:13px}.cloudgrid{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}.smallbtn{font-size:12px;padding:8px 10px}.item .actions{margin-top:10px}.item .actions button{font-size:12px;padding:7px 10px}@media(min-width:650px){.cloudgrid{grid-template-columns:1fr 1fr}}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script></head><body><main><header class="mast"><div class="eyebrow">LILY'S PERSONAL PRICE ARCHIVE · 2026</div><h1>Market<br>Scrapbook.</h1><p>我的日常採買手帖　/　分類・月份・價格比較</p><span class="stamp">KEEP THE GOOD FINDS</span></header><section class="cloud"><div class="eyebrow">CLOUD / 雲端同步</div><h2>我的私人價格資料庫</h2><p id="cloudStatus" class="status">尚未連線，請填入 Supabase 公開連線設定。</p><div class="cloudgrid"><div><label>Supabase Project URL</label><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co"></div><div><label>Supabase publishable key（公開金鑰）</label><input id="supabaseKey" placeholder="sb_publishable_..."></div></div><div class="actions"><button class="btn secondary" id="connectBtn">儲存連線設定</button><button class="btn red" id="loginBtn">使用 GitHub 登入</button><button class="btn secondary" id="logoutBtn" hidden>登出</button><button class="btn secondary" id="syncBtn">重新同步</button></div><p class="tiny">僅使用 publishable / anon key，絕對不要填入 secret 或 service_role key。登入後資料才會儲存至 Supabase。</p></section><section class="hero"><div class="eyebrow">01 / QUICK CAPTURE</div><h2>拍張收據，留下好價格。</h2><p>用手機拍照或選取照片。正式的 AI 自動解析需要連接雲端服務；這個版本先讓你拍照、保存待處理收據，避免誤以為已完成辨識。</p><div class="actions"><button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button><button class="btn secondary" id="manualBtn">手動補一筆</button></div><input type="file" id="photo" accept="image/*" capture="environment" hidden><img id="preview" class="preview" alt="收據預覽"><p id="photoStatus" class="tiny"></p></section><section><div class="sectiontitle"><h2>PRICE FINDER / 商品比價</h2><span>只比對已確認資料</span></div><div class="filters"><input id="search" class="wide" placeholder="搜尋商品、品牌或條碼"><select id="month"><option value="">所有月份</option></select><select id="category"><option value="">所有分類</option></select><select id="store"><option value="">所有店家</option><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select></div><div id="results" class="cards"></div></section><section><div class="sectiontitle"><h2>ARCHIVE / 我的資料</h2><span>匯出備份</span></div><div class="notice">登入 GitHub 後，已確認的商品紀錄會同步至 Supabase。未登入時可瀏覽本機既有紀錄，但無法新增雲端資料。收據照片尚未支援雲端上傳與 AI 辨識，請保留原圖。</div><div class="actions"><button class="btn secondary" id="export">匯出 JSON 備份</button><button class="btn secondary" id="import">匯入 JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="tiny" id="count"></p></section><footer>MARKET SCRAPBOOK · 個人價格資料庫 · 未確認品項不自動歸檔</footer></main><dialog id="editor"><h2 id="editorTitle">新增已確認商品</h2><form method="dialog" id="form"><label>商品名稱 *</label><input id="name" required><label>日期 *</label><input id="date" type="date" required><label>店家 *</label><select id="editStore"><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select><label>分類 *</label><select id="editCategory"></select><label>規格</label><input id="spec" placeholder="例如 500ml"><label>條碼</label><input id="barcode" placeholder="可留空"><label>單價 NT$ *</label><input id="amount" type="number" min="0" step="0.01" required><label>數量 *</label><input id="qty" type="number" min="1" value="1" required><div class="actions" style="margin-top:20px"><button class="btn red" type="submit">確認儲存</button><button class="btn secondary" type="button" id="cancel">取消</button></div></form></dialog>
+.cloud{background:#fffaf2;border:1px solid var(--line);padding:20px;margin:22px 0}.cloud h2{margin:0 0 8px}.cloud .status{color:#95684d;font-size:13px}.cloudgrid{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}.smallbtn{font-size:12px;padding:8px 10px}.item .actions{margin-top:10px}.item .actions button{font-size:12px;padding:7px 10px}@media(min-width:650px){.cloudgrid{grid-template-columns:1fr 1fr}}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script><style>
+.receipt-panel{background:#fffaf2;border:1px solid var(--line);padding:18px;margin:20px 0}.receipt-panel h2{font-family:Georgia,serif;font-size:20px;margin:0 0 8px}.receipt-list{display:grid;gap:12px}.receipt-card{border:1px solid var(--line);background:#fffdf8;padding:13px;display:grid;grid-template-columns:86px 1fr;gap:13px}.receipt-card img{width:86px;height:110px;object-fit:cover;cursor:pointer}.receipt-card .meta{line-height:1.7}.receipt-card .actions{margin-top:8px}.receipt-card .btn{padding:8px;font-size:12px}.receipt-info{font-size:12px;color:#87634c;line-height:1.7}.receipt-modal{max-width:95vw;width:780px}.receipt-modal img{max-width:100%;max-height:72vh;object-fit:contain;display:block;margin:auto}.receipt-card button{white-space:normal}
+</style></head><body><main><header class="mast"><div class="eyebrow">LILY'S PERSONAL PRICE ARCHIVE · 2026</div><h1>Market<br>Scrapbook.</h1><p>我的日常採買手帖　/　分類・月份・價格比較</p><span class="stamp">KEEP THE GOOD FINDS</span></header><section class="cloud"><div class="eyebrow">CLOUD / 雲端同步</div><h2>我的私人價格資料庫</h2><p id="cloudStatus" class="status">尚未連線，請填入 Supabase 公開連線設定。</p><div class="cloudgrid"><div><label>Supabase Project URL</label><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co"></div><div><label>Supabase publishable key（公開金鑰）</label><input id="supabaseKey" placeholder="sb_publishable_..."></div></div><div class="actions"><button class="btn secondary" id="connectBtn">儲存連線設定</button><button class="btn red" id="loginBtn">使用 GitHub 登入</button><button class="btn secondary" id="logoutBtn" hidden>登出</button><button class="btn secondary" id="syncBtn">重新同步</button></div><p class="tiny">僅使用 publishable / anon key，絕對不要填入 secret 或 service_role key。登入後資料才會儲存至 Supabase。</p></section><section class="hero"><div class="eyebrow">01 / QUICK CAPTURE</div><h2>拍張收據，留下好價格。</h2><p>用手機拍照或選取照片。正式的 AI 自動解析需要連接雲端服務；這個版本先讓你拍照、保存待處理收據，避免誤以為已完成辨識。</p><div class="actions"><button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button><button class="btn secondary" id="manualBtn">手動補一筆</button></div><input type="file" id="photo" accept="image/*" capture="environment" hidden><img id="preview" class="preview" alt="收據預覽"><p id="photoStatus" class="tiny"></p><div class="actions"><button class="btn red" id="saveReceiptBtn" hidden>儲存這張收據到雲端</button></div><p class="receipt-info">上傳後會存入你的私人 Supabase 收據資料庫，商品仍需逐項確認；不會自動猜測品名或價格。</p></section><section class="receipt-panel"><h2>RECEIPT INBOX / 待整理收據</h2><p class="receipt-info" id="receiptCount">登入後顯示你的雲端收據。</p><div id="receiptList" class="receipt-list"></div></section><section><div class="sectiontitle"><h2>PRICE FINDER / 商品比價</h2><span>只比對已確認資料</span></div><div class="filters"><input id="search" class="wide" placeholder="搜尋商品、品牌或條碼"><select id="month"><option value="">所有月份</option></select><select id="category"><option value="">所有分類</option></select><select id="store"><option value="">所有店家</option><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select></div><div id="results" class="cards"></div></section><section><div class="sectiontitle"><h2>ARCHIVE / 我的資料</h2><span>匯出備份</span></div><div class="notice">登入 GitHub 後，已確認的商品紀錄會同步至 Supabase。未登入時可瀏覽本機既有紀錄，但無法新增雲端資料。收據照片尚未支援雲端上傳與 AI 辨識，請保留原圖。</div><div class="actions"><button class="btn secondary" id="export">匯出 JSON 備份</button><button class="btn secondary" id="import">匯入 JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="tiny" id="count"></p></section><footer>MARKET SCRAPBOOK · 個人價格資料庫 · 未確認品項不自動歸檔</footer></main><dialog id="receiptViewer" class="receipt-modal"><div class="actions"><button class="btn secondary" id="closeReceiptViewer">關閉照片</button></div><img id="receiptFullImage" alt="收據原始照片"></dialog><dialog id="editor"><h2 id="editorTitle">新增已確認商品</h2><form method="dialog" id="form"><label>商品名稱 *</label><input id="name" required><label>日期 *</label><input id="date" type="date" required><label>店家 *</label><select id="editStore"><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select><label>分類 *</label><select id="editCategory"></select><label>規格</label><input id="spec" placeholder="例如 500ml"><label>條碼</label><input id="barcode" placeholder="可留空"><label>單價 NT$ *</label><input id="amount" type="number" min="0" step="0.01" required><label>數量 *</label><input id="qty" type="number" min="1" value="1" required><div class="actions" style="margin-top:20px"><button class="btn red" type="submit">確認儲存</button><button class="btn secondary" type="button" id="cancel">取消</button></div></form></dialog>
 <script>
 const $=id=>document.getElementById(id);
 const cats=['肉品','海鮮','蔬菜水果','咖啡／飲料','餅乾零食','乳製品','冷凍食品','調味料','日用品','其他'];
@@ -34,7 +36,7 @@ async function authRefresh(){
  const {data,error}=await client.auth.getUser();
  user=error?null:data.user;
  $('loginBtn').hidden=!!user;$('logoutBtn').hidden=!user;
- if(user){status('已登入 GitHub／Supabase：'+(user.email||user.id));await sync()}
+ if(user){status('已登入 GitHub／Supabase：'+(user.email||user.id));await sync();await loadReceipts()}
  else {status('已儲存連線設定，尚未登入 GitHub；目前顯示本機資料。');render()}
 }
 $('connectBtn').onclick=async()=>{if(configure())await authRefresh()};
@@ -43,7 +45,7 @@ $('loginBtn').onclick=async()=>{
  const {error}=await client.auth.signInWithOAuth({provider:'github',options:{redirectTo:location.origin+location.pathname}});
  if(error)status('登入失敗：'+error.message);
 };
-$('logoutBtn').onclick=async()=>{if(client){await client.auth.signOut();user=null;status('已登出；目前顯示本機資料。');$('loginBtn').hidden=false;$('logoutBtn').hidden=true;items=JSON.parse(localStorage.getItem(localKey)||'[]');render()}};
+$('logoutBtn').onclick=async()=>{if(client){await client.auth.signOut();user=null;status('已登出；目前顯示本機資料。');$('loginBtn').hidden=false;$('logoutBtn').hidden=true;receiptRecords=[];$('receiptList').replaceChildren();$('receiptCount').textContent='請先登入 GitHub 查看雲端收據。';items=JSON.parse(localStorage.getItem(localKey)||'[]');render()}};
 $('syncBtn').onclick=async()=>{if(!client||!user){status('請先完成 GitHub 登入。');return}await sync()};
 async function sync(){
  const {data,error}=await client.from('market_items').select('*').order('date',{ascending:false});
@@ -89,7 +91,7 @@ $('form').onsubmit=async e=>{
  if(!record.name||!record.date||!record.store||!Number.isFinite(record.amount)||record.amount<0||!Number.isInteger(record.qty)||record.qty<1){alert('請確認必填欄位、金額及數量。');return}
  const response=editingId?await client.from('market_items').update(record).eq('id',editingId).eq('user_id',user.id):await client.from('market_items').insert(record);
  if(response.error){alert('儲存失敗：'+response.error.message);return}
- $('editor').close();await sync();
+ $('editor').close();activeReceiptId=null;await sync();
 };
 async function removeItem(x){if(!confirm('確定刪除「'+x.name+'」？此操作會刪除雲端紀錄。'))return;
  const {error}=await client.from('market_items').delete().eq('id',x.id).eq('user_id',user.id);
@@ -97,7 +99,51 @@ async function removeItem(x){if(!confirm('確定刪除「'+x.name+'」？此操�
 }
 for(const id of ['search','month','category','store'])$(id).addEventListener(id==='search'?'input':'change',render);
 $('cameraBtn').onclick=()=>$('photo').click();
-$('photo').onchange=e=>{const f=e.target.files?.[0];if(!f)return;const url=URL.createObjectURL(f);$('preview').src=url;$('preview').style.display='block';$('photoStatus').textContent='照片僅供預覽，尚未進行 AI 解析或雲端上傳，請保留原圖。'};
+let selectedReceiptFile=null,receiptPreviewUrl=null,activeReceiptId=null,receiptRecords=[];
+$('photo').onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){alert('請選擇照片檔案');return}selectedReceiptFile=f;if(receiptPreviewUrl)URL.revokeObjectURL(receiptPreviewUrl);receiptPreviewUrl=URL.createObjectURL(f);$('preview').src=receiptPreviewUrl;$('preview').style.display='block';$('saveReceiptBtn').hidden=false;$('photoStatus').textContent='已選取 '+f.name+'，尚未上傳。請按「儲存這張收據到雲端」。'};
+$('saveReceiptBtn').onclick=async()=>{
+ if(!client||!user){alert('請先登入 GitHub，再儲存收據。');return}
+ const file=selectedReceiptFile;if(!file)return;
+ if(file.size>12*1024*1024){alert('照片超過 12MB，請先縮小後上傳。');return}
+ const btn=$('saveReceiptBtn');btn.disabled=true;btn.textContent='正在上傳…';
+ let path=null;
+ try{
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8)||'jpg';
+  const uuid=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2));
+  path=user.id+'/'+uuid+'.'+ext;
+  const up=await client.storage.from('market-receipts').upload(path,file,{contentType:file.type,upsert:false});
+  if(up.error)throw up.error;
+  const {error}=await client.from('market_receipts').insert({user_id:user.id,storage_path:path,original_name:file.name,status:'pending'});
+  if(error){await client.storage.from('market-receipts').remove([path]);throw error}
+  $('photoStatus').textContent='收據已安全儲存到雲端，請在下方「待整理收據」查看。';
+  selectedReceiptFile=null;$('photo').value='';btn.hidden=true;await loadReceipts();
+ }catch(e){$('photoStatus').textContent='上傳失敗：'+(e.message||String(e))+'。照片仍在此頁，請保留原圖。'}
+ finally{btn.disabled=false;btn.textContent='儲存這張收據到雲端'}
+};
+async function loadReceipts(){
+ const list=$('receiptList');list.replaceChildren();
+ if(!client||!user){$('receiptCount').textContent='請先登入 GitHub 查看雲端收據。';return}
+ const {data,error}=await client.from('market_receipts').select('id,storage_path,original_name,status,created_at').order('created_at',{ascending:false});
+ if(error){$('receiptCount').textContent='收據讀取失敗：'+error.message;return}
+ receiptRecords=data||[];$('receiptCount').textContent='雲端收據 '+receiptRecords.length+' 張（待整理 '+receiptRecords.filter(x=>x.status==='pending').length+' 張）';
+ if(!receiptRecords.length){const p=document.createElement('p');p.className='tiny';p.textContent='尚無雲端收據，請在上方選擇照片並按儲存。';list.append(p);return}
+ for(const r of receiptRecords){
+  const card=document.createElement('div');card.className='receipt-card';
+  const img=document.createElement('img');img.alt='收據照片';img.loading='lazy';
+  const signed=await client.storage.from('market-receipts').createSignedUrl(r.storage_path,3600);
+  if(!signed.error&&signed.data?.signedUrl){img.src=signed.data.signedUrl;img.onclick=()=>showReceipt(img.src)};
+  const content=document.createElement('div');const meta=document.createElement('div');meta.className='meta';meta.textContent=(r.original_name||'收據')+' · '+new Date(r.created_at).toLocaleString('zh-TW')+' · '+(r.status==='reviewed'?'已人工標記完成':'待核對');
+  const note=document.createElement('div');note.className='tiny';note.textContent='照片已儲存；商品價格尚未自動辨識。';
+  const acts=document.createElement('div');acts.className='actions';
+  const add=document.createElement('button');add.className='btn red';add.textContent='依收據新增商品';add.onclick=()=>{activeReceiptId=r.id;openEditor();$('editorTitle').textContent='依收據新增已確認商品'};
+  const toggle=document.createElement('button');toggle.className='btn secondary';toggle.textContent=r.status==='reviewed'?'標回待整理':'標記已核對';toggle.onclick=async()=>{if(r.status!=='reviewed'&&!confirm('請確認已逐項核對收據內容。這只更改收據狀態，不會自動新增商品。'))return;const {error}=await client.from('market_receipts').update({status:r.status==='reviewed'?'pending':'reviewed'}).eq('id',r.id).eq('user_id',user.id);if(error)alert(error.message);else await loadReceipts()};
+  const del=document.createElement('button');del.className='btn secondary';del.textContent='刪除收據';del.onclick=async()=>{if(!confirm('確定永久刪除這張雲端收據？已建立的商品資料不受影響。'))return;const {error}=await client.from('market_receipts').delete().eq('id',r.id).eq('user_id',user.id);if(error){alert('刪除失敗：'+error.message);return}const result=await client.storage.from('market-receipts').remove([r.storage_path]);if(result.error)alert('收據紀錄已刪除，但照片刪除失敗：'+result.error.message);await loadReceipts()};
+  acts.append(add,toggle,del);content.append(meta,note,acts);card.append(img,content);list.append(card)
+ }
+}
+function showReceipt(src){$('receiptFullImage').src=src;$('receiptViewer').showModal()}
+$('closeReceiptViewer').onclick=()=>$('receiptViewer').close();
+
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify({version:2,items},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='lily-market-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)};
 $('import').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{try{const data=JSON.parse(await e.target.files[0].text());if(!Array.isArray(data.items))throw Error('格式錯誤');if(!user||!client){alert('請先登入 GitHub 才能匯入雲端。');return}
