@@ -60,8 +60,8 @@ function render(){
  const q=$('search').value.trim().toLowerCase();
  const root=$('results');root.replaceChildren();
  const pager=$('pagination');
- if(!q){
-  const empty=document.createElement('div');empty.className='empty';empty.textContent='請輸入商品名稱、品牌或條碼，搜尋後顯示商品。';root.append(empty);pager.hidden=true;
+ if(!q&&!$('month').value&&!$('category').value&&!$('store').value){
+  const empty=document.createElement('div');empty.className='empty';empty.textContent='輸入商品名稱、品牌或條碼，或選擇月份、分類、店家以顯示商品。';root.append(empty);pager.hidden=true;
   $('count').textContent='已確認商品紀錄：'+items.length+' 筆'+(user?'（Supabase 雲端）':'（本機）');
   return;
  }
