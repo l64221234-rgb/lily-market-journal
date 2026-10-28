@@ -13,7 +13,8 @@ body{background-image:radial-gradient(#e8dccc 0.7px,transparent 0.7px);backgroun
 @media(max-width:480px){main{padding:12px 13px 70px}.mast{padding:27px 16px 20px}.mast h1{font-size:40px}.hero{padding:20px 15px}.actions .btn{flex:1}}
 .cloud{background:#fffaf2;border:1px solid var(--line);padding:20px;margin:22px 0}.cloud h2{margin:0 0 8px}.cloud .status{color:#95684d;font-size:13px}.cloudgrid{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}.smallbtn{font-size:12px;padding:8px 10px}.item .actions{margin-top:10px}.item .actions button{font-size:12px;padding:7px 10px}@media(min-width:650px){.cloudgrid{grid-template-columns:1fr 1fr}}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script><style>
 .receipt-panel{background:#fffaf2;border:1px solid var(--line);padding:18px;margin:20px 0}.receipt-panel h2{font-family:Georgia,serif;font-size:20px;margin:0 0 8px}.receipt-list{display:grid;gap:12px}.receipt-card{border:1px solid var(--line);background:#fffdf8;padding:13px;display:grid;grid-template-columns:86px 1fr;gap:13px}.receipt-card img{width:86px;height:110px;object-fit:cover;cursor:pointer}.receipt-card .meta{line-height:1.7}.receipt-card .actions{margin-top:8px}.receipt-card .btn{padding:8px;font-size:12px}.receipt-info{font-size:12px;color:#87634c;line-height:1.7}.receipt-modal{max-width:95vw;width:780px}.receipt-modal img{max-width:100%;max-height:72vh;object-fit:contain;display:block;margin:auto}.receipt-card button{white-space:normal}
-</style></head><body><main><header class="mast"><div class="eyebrow">LILY'S PERSONAL PRICE ARCHIVE · 2026</div><h1>Market<br>Scrapbook.</h1><p>我的日常採買手帖　/　分類・月份・價格比較</p><span class="stamp">KEEP THE GOOD FINDS</span></header><section class="cloud"><div class="eyebrow">CLOUD / 雲端同步</div><h2>我的私人價格資料庫</h2><p id="cloudStatus" class="status">尚未連線，請填入 Supabase 公開連線設定。</p><div class="cloudgrid"><div><label>Supabase Project URL</label><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co"></div><div><label>Supabase publishable key（公開金鑰）</label><input id="supabaseKey" placeholder="sb_publishable_..."></div></div><div class="actions"><button class="btn secondary" id="connectBtn">儲存連線設定</button><button class="btn red" id="loginBtn">使用 GitHub 登入</button><button class="btn secondary" id="logoutBtn" hidden>登出</button><button class="btn secondary" id="syncBtn">重新同步</button></div><p class="tiny">僅使用 publishable / anon key，絕對不要填入 secret 或 service_role key。登入後資料才會儲存至 Supabase。</p></section><section class="hero"><div class="eyebrow">01 / QUICK CAPTURE</div><h2>拍張收據，留下好價格。</h2><p>用手機拍照或選取照片。正式的 AI 自動解析需要連接雲端服務；這個版本先讓你拍照、保存待處理收據，避免誤以為已完成辨識。</p><div class="actions"><button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button><button class="btn secondary" id="manualBtn">手動補一筆</button></div><input type="file" id="photo" accept="image/*" capture="environment" hidden><img id="preview" class="preview" alt="收據預覽"><p id="photoStatus" class="tiny"></p><div class="actions"><button class="btn red" id="saveReceiptBtn" hidden>儲存這張收據到雲端</button></div><p class="receipt-info">上傳後會存入你的私人 Supabase 收據資料庫，商品仍需逐項確認；不會自動猜測品名或價格。</p></section><section class="receipt-panel"><h2>RECEIPT INBOX / 待整理收據</h2><p class="receipt-info" id="receiptCount">登入後顯示你的雲端收據。</p><div id="receiptList" class="receipt-list"></div></section><section><div class="sectiontitle"><h2>PRICE FINDER / 商品比價</h2><span>只比對已確認資料</span></div><div class="filters"><input id="search" class="wide" placeholder="搜尋商品、品牌或條碼"><select id="month"><option value="">所有月份</option></select><select id="category"><option value="">所有分類</option></select><select id="store"><option value="">所有店家</option><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select></div><p id="resultStatus" class="result-status" aria-live="polite" hidden></p><div id="results" class="cards" aria-live="polite"></div><div class="pagination" id="pagination" hidden><button class="btn secondary" id="prevPage" type="button">上一頁</button><span id="pageInfo" class="meta"></span><button class="btn secondary" id="nextPage" type="button">下一頁</button></div></section><section><div class="sectiontitle"><h2>ARCHIVE / 我的資料</h2><span>匯出備份</span></div><div class="notice">登入 GitHub 後，已確認的商品紀錄會同步至 Supabase。未登入時可瀏覽本機既有紀錄，但無法新增雲端資料。收據照片尚未支援雲端上傳與 AI 辨識，請保留原圖。</div><div class="actions"><button class="btn secondary" id="export">匯出 JSON 備份</button><button class="btn secondary" id="import">匯入 JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="tiny" id="count"></p></section><footer>MARKET SCRAPBOOK · 個人價格資料庫 · 未確認品項不自動歸檔</footer></main><dialog id="receiptViewer" class="receipt-modal"><div class="actions"><button class="btn secondary" id="closeReceiptViewer">關閉照片</button></div><img id="receiptFullImage" alt="收據原始照片"></dialog><dialog id="editor"><h2 id="editorTitle">新增已確認商品</h2><form method="dialog" id="form"><label>商品名稱 *</label><input id="name" required><label>日期 *</label><input id="date" type="date" required><label>店家 *</label><select id="editStore"><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select><label>分類 *</label><select id="editCategory"></select><label>規格</label><input id="spec" placeholder="例如 500ml"><label>條碼</label><input id="barcode" placeholder="可留空"><label>單價 NT$ *</label><input id="amount" type="number" min="0" step="0.01" required><label>數量 *</label><input id="qty" type="number" min="1" value="1" required><div class="actions" style="margin-top:20px"><button class="btn red" type="submit">確認儲存</button><button class="btn secondary" type="button" id="cancel">取消</button></div></form></dialog>
+.ocr-status{margin:8px 0;padding:8px 10px;background:#f8eadc;border-left:3px solid var(--red);font-size:12px;line-height:1.6}.ocr-review{width:min(96vw,900px);max-height:92vh;overflow:auto}.ocr-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.ocr-summary>div{background:#fffaf3;border:1px solid var(--line);padding:10px}.ocr-items{display:grid;gap:10px}.ocr-item{background:#fffdf8;border:1px solid var(--line);padding:12px}.ocr-item-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}.ocr-item .full{grid-column:1/-1}.money-ok{color:#48764f;font-weight:800}.money-bad{color:#a13f33;font-weight:800}@media(max-width:600px){.ocr-item-grid{grid-template-columns:1fr 1fr}.ocr-item-grid .name-field,.ocr-item-grid .full{grid-column:1/-1}.ocr-summary{grid-template-columns:1fr 1fr}}
+</style></head><body><main><header class="mast"><div class="eyebrow">LILY'S PERSONAL PRICE ARCHIVE · 2026</div><h1>Market<br>Scrapbook.</h1><p>我的日常採買手帖　/　分類・月份・價格比較</p><span class="stamp">KEEP THE GOOD FINDS</span></header><section class="cloud"><div class="eyebrow">CLOUD / 雲端同步</div><h2>我的私人價格資料庫</h2><p id="cloudStatus" class="status">尚未連線，請填入 Supabase 公開連線設定。</p><div class="cloudgrid"><div><label>Supabase Project URL</label><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co"></div><div><label>Supabase publishable key（公開金鑰）</label><input id="supabaseKey" placeholder="sb_publishable_..."></div></div><div class="actions"><button class="btn secondary" id="connectBtn">儲存連線設定</button><button class="btn red" id="loginBtn">使用 GitHub 登入</button><button class="btn secondary" id="logoutBtn" hidden>登出</button><button class="btn secondary" id="syncBtn">重新同步</button></div><p class="tiny">僅使用 publishable / anon key，絕對不要填入 secret 或 service_role key。登入後資料才會儲存至 Supabase。</p></section><section class="hero"><div class="eyebrow">01 / QUICK CAPTURE</div><h2>拍張收據，留下好價格。</h2><p>用手機拍照或選取照片。上傳後會由 AI 讀取店家、日期、商品、數量、規格、金額與折讓，並先核對收據總額，再讓你確認。</p><div class="actions"><button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button><button class="btn secondary" id="manualBtn">手動補一筆</button></div><input type="file" id="photo" accept="image/*" capture="environment" hidden><img id="preview" class="preview" alt="收據預覽"><p id="photoStatus" class="tiny"></p><div class="actions"><button class="btn red" id="saveReceiptBtn" hidden>上傳並自動辨識</button></div><p class="receipt-info">AI 結果不會直接入帳；請在辨識結果中核對商品與折讓，確認總額相符後再儲存。</p></section><section class="receipt-panel"><h2>RECEIPT INBOX / 待整理收據</h2><p class="receipt-info" id="receiptCount">登入後顯示你的雲端收據。</p><div id="receiptList" class="receipt-list"></div></section><section><div class="sectiontitle"><h2>PRICE FINDER / 商品比價</h2><span>只比對已確認資料</span></div><div class="filters"><input id="search" class="wide" placeholder="搜尋商品、品牌或條碼"><select id="month"><option value="">所有月份</option></select><select id="category"><option value="">所有分類</option></select><select id="store"><option value="">所有店家</option><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select></div><p id="resultStatus" class="result-status" aria-live="polite" hidden></p><div id="results" class="cards" aria-live="polite"></div><div class="pagination" id="pagination" hidden><button class="btn secondary" id="prevPage" type="button">上一頁</button><span id="pageInfo" class="meta"></span><button class="btn secondary" id="nextPage" type="button">下一頁</button></div></section><section><div class="sectiontitle"><h2>ARCHIVE / 我的資料</h2><span>匯出備份</span></div><div class="notice">登入 GitHub 後，已確認的商品紀錄會同步至 Supabase。收據會先由 AI 辨識並核對金額，只有你確認的品項才會寫入商品紀錄。</div><div class="actions"><button class="btn secondary" id="export">匯出 JSON 備份</button><button class="btn secondary" id="import">匯入 JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="tiny" id="count"></p></section><footer>MARKET SCRAPBOOK · 個人價格資料庫 · 未確認品項不自動歸檔</footer></main><dialog id="receiptViewer" class="receipt-modal"><div class="actions"><button class="btn secondary" id="closeReceiptViewer">關閉照片</button></div><img id="receiptFullImage" alt="收據原始照片"></dialog><dialog id="ocrReview" class="ocr-review"><h2>AI 收據辨識結果</h2><p id="ocrMessage" class="ocr-status"></p><div id="ocrSummary" class="ocr-summary"></div><div id="ocrItems" class="ocr-items"></div><div class="actions" style="margin-top:18px"><button class="btn red" id="saveOcrItems" type="button">確認明細並全部儲存</button><button class="btn secondary" id="cancelOcr" type="button">先不儲存</button></div></dialog><dialog id="editor"><h2 id="editorTitle">新增已確認商品</h2><form method="dialog" id="form"><label>商品名稱 *</label><input id="name" required><label>日期 *</label><input id="date" type="date" required><label>店家 *</label><select id="editStore"><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select><label>分類 *</label><select id="editCategory"></select><label>規格</label><input id="spec" placeholder="例如 500ml"><label>條碼</label><input id="barcode" placeholder="可留空"><label>單價 NT$ *</label><input id="amount" type="number" min="0" step="0.01" required><label>數量 *</label><input id="qty" type="number" min="1" value="1" required><div class="actions" style="margin-top:20px"><button class="btn red" type="submit">確認儲存</button><button class="btn secondary" type="button" id="cancel">取消</button></div></form></dialog>
 <script>
 const $=id=>document.getElementById(id);
 const cats=['肉品','海鮮','蔬菜水果','咖啡／飲料','餅乾零食','乳製品','冷凍食品','調味料','日用品','其他'];
@@ -78,7 +79,7 @@ function render(){
   const p=document.createElement('div');p.className='row';
   const left=document.createElement('span');left.className='tag';left.textContent=x.category;
   const right=document.createElement('span');right.className='price';right.textContent='NT$'+Number(x.amount).toLocaleString('zh-TW');
-  p.append(left,right);e.append(h,meta,p);
+  p.append(left,right);e.append(h,meta,p);if(x.note){const n=document.createElement('div');n.className='tiny';n.textContent=x.note;e.append(n)}
   if(user){const actions=document.createElement('div');actions.className='actions';
    const edit=document.createElement('button');edit.className='btn secondary';edit.textContent='修改';edit.onclick=()=>openEditor(x);
    const del=document.createElement('button');del.className='btn secondary';del.textContent='刪除';del.onclick=()=>removeItem(x);
@@ -119,7 +120,7 @@ async function removeItem(x){if(!confirm('確定刪除「'+x.name+'」？此操�
 for(const id of ['search','month','category','store'])$(id).addEventListener(id==='search'?'input':'change',()=>{resultPage=0;render()});
 $('cameraBtn').onclick=()=>$('photo').click();
 let selectedReceiptFile=null,receiptPreviewUrl=null,activeReceiptId=null,receiptRecords=[];
-$('photo').onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){alert('請選擇照片檔案');return}selectedReceiptFile=f;if(receiptPreviewUrl)URL.revokeObjectURL(receiptPreviewUrl);receiptPreviewUrl=URL.createObjectURL(f);$('preview').src=receiptPreviewUrl;$('preview').style.display='block';$('saveReceiptBtn').hidden=false;$('photoStatus').textContent='已選取 '+f.name+'，尚未上傳。請按「儲存這張收據到雲端」。'};
+$('photo').onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){alert('請選擇照片檔案');return}selectedReceiptFile=f;if(receiptPreviewUrl)URL.revokeObjectURL(receiptPreviewUrl);receiptPreviewUrl=URL.createObjectURL(f);$('preview').src=receiptPreviewUrl;$('preview').style.display='block';$('saveReceiptBtn').hidden=false;$('photoStatus').textContent='已選取 '+f.name+'，尚未上傳。請按「上傳並自動辨識」。'};
 $('saveReceiptBtn').onclick=async()=>{
  if(!client||!user){alert('請先登入 GitHub，再儲存收據。');return}
  const file=selectedReceiptFile;if(!file)return;
@@ -132,17 +133,102 @@ $('saveReceiptBtn').onclick=async()=>{
   path=user.id+'/'+uuid+'.'+ext;
   const up=await client.storage.from('market-receipts').upload(path,file,{contentType:file.type,upsert:false});
   if(up.error)throw up.error;
-  const {error}=await client.from('market_receipts').insert({user_id:user.id,storage_path:path,original_name:file.name,status:'pending'});
+  const {data:receipt,error}=await client.from('market_receipts').insert({user_id:user.id,storage_path:path,original_name:file.name,status:'pending'}).select('id,storage_path,original_name,status,created_at').single();
   if(error){await client.storage.from('market-receipts').remove([path]);throw error}
-  $('photoStatus').textContent='收據已安全儲存到雲端，請在下方「待整理收據」查看。';
+  $('photoStatus').textContent='照片已上傳，AI 正在辨識商品與核對總額…';
   selectedReceiptFile=null;$('photo').value='';btn.hidden=true;await loadReceipts();
+  await recognizeReceipt(receipt);
  }catch(e){$('photoStatus').textContent='上傳失敗：'+(e.message||String(e))+'。照片仍在此頁，請保留原圖。'}
- finally{btn.disabled=false;btn.textContent='儲存這張收據到雲端'}
+ finally{btn.disabled=false;btn.textContent='上傳並自動辨識'}
 };
+let ocrDraft=null;
+async function recognizeReceipt(receipt,button=null){
+ if(!client||!user){alert('請先登入 GitHub，再使用 AI 辨識。');return}
+ const target=button||$('saveReceiptBtn');const oldText=target?.textContent;
+ if(target){target.disabled=true;target.textContent='AI 辨識中…'}
+ $('photoStatus').textContent='AI 正在讀取收據，長張收據約需 20–60 秒，請不要關閉頁面。';
+ try{
+  const {data,error}=await client.functions.invoke('receipt-ocr',{body:{receipt_id:receipt.id}});
+  if(error){let detail=error.message;try{const body=await error.context?.json();detail=body?.error||detail}catch{}throw Error(detail)}
+  if(!data?.receipt?.items?.length)throw Error(data?.error||'AI 沒有讀到商品，請重新拍攝清楚完整的收據。');
+  $('photoStatus').textContent='AI 辨識完成，請核對商品、折讓與總額。';
+  showOcrReview(data.receipt,receipt.id);
+  await loadReceipts();
+ }catch(e){
+  $('photoStatus').textContent='AI 辨識失敗：'+(e.message||String(e));
+  alert('AI 辨識失敗：'+(e.message||String(e))+'\n\n照片仍保留在待整理收據，可稍後再按「AI 自動辨識」。');
+ }finally{if(target){target.disabled=false;target.textContent=oldText||'AI 自動辨識'}}
+}
+function field(label,value,type='text',cls=''){
+ const wrap=document.createElement('div');if(cls)wrap.className=cls;
+ const l=document.createElement('label');l.textContent=label;
+ const i=document.createElement('input');i.type=type;i.value=value??'';
+ wrap.append(l,i);return {wrap,input:i}
+}
+function showOcrReview(result,receiptId){
+ activeReceiptId=receiptId;ocrDraft=structuredClone(result);
+ const summary=$('ocrSummary');summary.replaceChildren();
+ const store=field('店家',ocrDraft.store||'其他');store.input.id='ocrStore';
+ const date=field('購買日期',ocrDraft.purchase_date||new Date().toLocaleDateString('en-CA'),'date');date.input.id='ocrDate';
+ const total=field('收據總金額',Number(ocrDraft.receipt_total||0),'number');total.input.id='ocrTotal';total.input.step='0.01';
+ const check=document.createElement('div');check.innerHTML='<label>金額核對</label><div id="ocrCheck"></div>';
+ summary.append(store.wrap,date.wrap,total.wrap,check);
+ const root=$('ocrItems');root.replaceChildren();
+ ocrDraft.items.forEach((item,index)=>{
+  const card=document.createElement('section');card.className='ocr-item';card.dataset.index=index;
+  const title=document.createElement('strong');title.textContent='品項 '+(index+1);
+  const grid=document.createElement('div');grid.className='ocr-item-grid';
+  const name=field('商品名稱',item.name||'','text','name-field');name.input.dataset.field='name';
+  const qty=field('數量',item.qty||1,'number');qty.input.dataset.field='qty';qty.input.min='1';qty.input.step='1';
+  const amount=field('實付金額',Number(item.final_amount??item.line_total??0),'number');amount.input.dataset.field='final_amount';amount.input.min='0';amount.input.step='0.01';
+  const spec=field('規格',item.spec||'');spec.input.dataset.field='spec';
+  const discount=field('折讓金額',Number(item.discount||0),'number');discount.input.dataset.field='discount';discount.input.min='0';discount.input.step='0.01';
+  const catWrap=document.createElement('div');const catLabel=document.createElement('label');catLabel.textContent='分類';const cat=document.createElement('select');cat.dataset.field='category';cats.forEach(c=>cat.add(new Option(c,c)));cat.value=cats.includes(item.category)?item.category:'其他';catWrap.append(catLabel,cat);
+  const note=field('備註（折讓會保留在這個品項）',item.note||'','text','full');note.input.dataset.field='note';
+  for(const f of [name,qty,amount,spec,discount])grid.append(f.wrap);grid.append(catWrap,note.wrap);card.append(title,grid);root.append(card);
+ });
+ root.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',recalculateOcr));
+ total.input.addEventListener('input',recalculateOcr);
+ $('ocrMessage').textContent=ocrDraft.warning||'請逐項核對；折讓已附在對應商品的備註，不會另外列成商品。';
+ recalculateOcr();$('ocrReview').showModal();
+}
+function readOcrItems(){
+ return [...$('ocrItems').querySelectorAll('.ocr-item')].map(card=>{
+  const get=f=>card.querySelector('[data-field="'+f+'"]')?.value??'';
+  return {name:get('name').trim(),qty:Number(get('qty')),final_amount:Number(get('final_amount')),spec:get('spec').trim(),discount:Number(get('discount')||0),category:get('category'),note:get('note').trim()}
+ })
+}
+function recalculateOcr(){
+ const calculated=readOcrItems().reduce((sum,x)=>sum+(Number.isFinite(x.final_amount)?x.final_amount:0),0);
+ const receiptTotal=Number($('ocrTotal').value||0),difference=Math.round((receiptTotal-calculated)*100)/100;
+ const el=$('ocrCheck');el.className=Math.abs(difference)<0.01?'money-ok':'money-bad';
+ el.textContent=`品項合計 NT$${calculated.toLocaleString('zh-TW')}｜差額 NT$${difference.toLocaleString('zh-TW')}`;
+ return {calculated,receiptTotal,difference}
+}
+$('cancelOcr').onclick=()=>$('ocrReview').close();
+$('saveOcrItems').onclick=async()=>{
+ if(!client||!user||!activeReceiptId)return;
+ const itemsToSave=readOcrItems(),check=recalculateOcr();
+ if(itemsToSave.some(x=>!x.name||!Number.isInteger(x.qty)||x.qty<1||!Number.isFinite(x.final_amount)||x.final_amount<0)){alert('請確認每個品項都有名稱、正確數量與金額。');return}
+ if(Math.abs(check.difference)>=0.01&&!confirm(`目前品項合計與收據總額相差 NT$${check.difference}，仍要儲存嗎？`))return;
+ const {count,error:countError}=await client.from('market_items').select('id',{count:'exact',head:true}).eq('receipt_id',activeReceiptId);
+ if(countError){alert('檢查重複資料失敗：'+countError.message);return}
+ if(count>0){alert('這張收據的商品已經存入，為避免重複不會再次新增。');return}
+ const store=$('ocrStore').value.trim()||'其他',date=$('ocrDate').value;
+ if(!date){alert('請確認購買日期。');return}
+ const records=itemsToSave.map(x=>({user_id:user.id,receipt_id:activeReceiptId,name:x.name,date,store,category:x.category,spec:x.spec,barcode:'',amount:x.final_amount,qty:x.qty,discount:x.discount,receipt_total:check.receiptTotal,note:[x.note,x.discount>0&&!x.note.includes('折')?'折讓 NT$'+x.discount:''].filter(Boolean).join('；')}));
+ const btn=$('saveOcrItems');btn.disabled=true;btn.textContent='正在儲存…';
+ try{
+  const {error}=await client.from('market_items').insert(records);if(error)throw error;
+  const {error:updateError}=await client.from('market_receipts').update({status:'reviewed',ocr_result:{...ocrDraft,store,date,receipt_total:check.receiptTotal,calculated_total:check.calculated,difference:check.difference,items:itemsToSave},ocr_error:null}).eq('id',activeReceiptId).eq('user_id',user.id);if(updateError)throw updateError;
+  $('ocrReview').close();activeReceiptId=null;await Promise.all([sync(),loadReceipts()]);alert('已儲存 '+records.length+' 個品項，且完成收據總額核對。');
+ }catch(e){alert('儲存失敗：'+e.message)}finally{btn.disabled=false;btn.textContent='確認明細並全部儲存'}
+};
+
 async function loadReceipts(){
  const list=$('receiptList');list.replaceChildren();
  if(!client||!user){$('receiptCount').textContent='請先登入 GitHub 查看雲端收據。';return}
- const {data,error}=await client.from('market_receipts').select('id,storage_path,original_name,status,created_at').order('created_at',{ascending:false});
+ const {data,error}=await client.from('market_receipts').select('id,storage_path,original_name,status,created_at,ocr_result,ocr_error').order('created_at',{ascending:false});
  if(error){$('receiptCount').textContent='收據讀取失敗：'+error.message;return}
  receiptRecords=data||[];$('receiptCount').textContent='雲端收據 '+receiptRecords.length+' 張（待整理 '+receiptRecords.filter(x=>x.status==='pending').length+' 張）';
  if(!receiptRecords.length){const p=document.createElement('p');p.className='tiny';p.textContent='尚無雲端收據，請在上方選擇照片並按儲存。';list.append(p);return}
@@ -152,10 +238,10 @@ async function loadReceipts(){
   const signed=await client.storage.from('market-receipts').createSignedUrl(r.storage_path,3600);
   if(!signed.error&&signed.data?.signedUrl){img.src=signed.data.signedUrl;img.onclick=()=>showReceipt(img.src)};
   const content=document.createElement('div');const meta=document.createElement('div');meta.className='meta';meta.textContent=(r.original_name||'收據')+' · '+new Date(r.created_at).toLocaleString('zh-TW')+' · '+(r.status==='reviewed'?'已人工標記完成':'待核對');
-  const note=document.createElement('div');note.className='tiny';note.textContent='照片已儲存；商品價格尚未自動辨識。';
+  const note=document.createElement('div');note.className='tiny';note.textContent=r.status==='reviewed'?'已核對並存入商品紀錄。':(r.ocr_result?'AI 已辨識，請開啟結果核對。':(r.ocr_error?'上次辨識失敗：'+r.ocr_error:'照片已儲存，等待 AI 辨識。'));
   const acts=document.createElement('div');acts.className='actions';
-  const add=document.createElement('button');add.className='btn red';add.textContent='依收據新增商品';add.onclick=()=>{activeReceiptId=r.id;openEditor();$('editorTitle').textContent='依收據新增已確認商品'};
-  const toggle=document.createElement('button');toggle.className='btn secondary';toggle.textContent=r.status==='reviewed'?'標回待整理':'標記已核對';toggle.onclick=async()=>{if(r.status!=='reviewed'&&!confirm('請確認已逐項核對收據內容。這只更改收據狀態，不會自動新增商品。'))return;const {error}=await client.from('market_receipts').update({status:r.status==='reviewed'?'pending':'reviewed'}).eq('id',r.id).eq('user_id',user.id);if(error)alert(error.message);else await loadReceipts()};
+  const add=document.createElement('button');add.className='btn red';add.textContent=r.ocr_result?'查看 AI 辨識結果':'AI 自動辨識';add.onclick=()=>r.ocr_result?showOcrReview(r.ocr_result,r.id):recognizeReceipt(r,add);
+  const toggle=document.createElement('button');toggle.className='btn secondary';toggle.textContent=r.status==='reviewed'?'標回待整理':'標記已核對';toggle.onclick=async()=>{if(r.status!=='reviewed'&&!confirm('請先確認 AI 辨識明細及收據總額均正確。這只更改收據狀態。'))return;const {error}=await client.from('market_receipts').update({status:r.status==='reviewed'?'pending':'reviewed'}).eq('id',r.id).eq('user_id',user.id);if(error)alert(error.message);else await loadReceipts()};
   const del=document.createElement('button');del.className='btn secondary';del.textContent='刪除收據';del.onclick=async()=>{if(!confirm('確定永久刪除這張雲端收據？已建立的商品資料不受影響。'))return;const {error}=await client.from('market_receipts').delete().eq('id',r.id).eq('user_id',user.id);if(error){alert('刪除失敗：'+error.message);return}const result=await client.storage.from('market-receipts').remove([r.storage_path]);if(result.error)alert('收據紀錄已刪除，但照片刪除失敗：'+result.error.message);await loadReceipts()};
   acts.append(add,toggle,del);content.append(meta,note,acts);card.append(img,content);list.append(card)
  }
