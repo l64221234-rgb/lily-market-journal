@@ -451,9 +451,10 @@ function showOcrReview(result,receiptId){
  const store=field('店家',ocrDraft.store||'其他');store.input.id='ocrStore';
  const date=field('購買日期',ocrDraft.purchase_date||new Date().toLocaleDateString('en-CA'),'date');date.input.id='ocrDate';
  const total=field('收據總金額',Number(ocrDraft.receipt_total||0),'number');total.input.id='ocrTotal';total.input.step='0.01';
- const check=document.createElement('div');check.innerHTML='<label>金額核對</label>
-<div id="ocrCheck">
-</div>';
+ const check=document.createElement('div');
+ const checkLabel=document.createElement('label');checkLabel.textContent='金額核對';
+ const checkValue=document.createElement('div');checkValue.id='ocrCheck';
+ check.append(checkLabel,checkValue);
  summary.append(store.wrap,date.wrap,total.wrap,check);
  const root=$('ocrItems');root.replaceChildren();
  ocrDraft.items.forEach((item,index)=>{
