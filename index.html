@@ -167,14 +167,22 @@ async function recognizeReceipt(receipt,button=null){
    result=fallback.data?.receipt;if(!result)throw Error('原本服務：'+workerMessage+'；備援服務沒有回傳辨識結果');
   }
   const raw=Array.isArray(result.items)?result.items:[];if(!raw.length)throw Error('AI 沒有辨識出商品，請重新拍攝清楚完整的收據。');
-  const normalizedItems=raw.map(item=>{
-   const original=Number(item.original_amount??item.amount??item.unit_price??item.price??0)||0;
-   const discount=Math.max(0,Number(item.discount??item.discount_amount??0)||0);
-   const finalAmount=Number(item.final_amount??item.line_total??item.amount??item.unit_price??item.price??0)||0;
-   const category=cats.includes(item.category)?item.category:'其他';
-   const note=String(item.note||'').trim()|| (discount>0?`原價 NT$${original}；折讓 NT$${discount}`:'');
-   return {name:String(item.name||item.product_name||'').trim(),spec:String(item.spec||item.size||'').trim(),qty:Math.max(1,Math.round(Number(item.qty??item.quantity??1)||1)),original_amount:original,discount,final_amount:finalAmount,category,note};
+  const baseItems=raw.map(item=>{
+   const name=String(item.name||item.product_name||'').trim(),note=String(item.note||'').trim();
+   const rawAmount=Number(item.final_amount??item.line_total??item.amount??item.unit_price??item.price??0)||0;
+   let discount=Math.max(0,Number(item.discount??item.discount_amount??0)||0),finalAmount=rawAmount;
+   if(!discount&&finalAmount>=0){const m=note.match(/(?:促銷|折扣|折價|折讓|店折|減免)\s*[:：$NT＄]*\s*(\d+(?:\.\d+)?)/i);if(m)discount=Number(m[1])}
+   const suppliedOriginal=Number(item.original_amount),original=Number.isFinite(suppliedOriginal)&&suppliedOriginal>0?suppliedOriginal:Math.round((finalAmount+discount)*100)/100;
+   return {name,spec:String(item.spec||item.size||'').trim(),qty:Math.max(1,Math.round(Number(item.qty??item.quantity??1)||1)),original_amount:original,discount,final_amount:finalAmount,category:cats.includes(item.category)?item.category:'其他',note,_rawAmount:rawAmount};
   });
+  const discountWords=/(折扣|折讓|折價|促銷|店折|減免|優惠|折抵)/;
+  const discountLines=[],normalizedItems=[];
+  for(const item of baseItems){if(item._rawAmount<0||(item.original_amount<0&&discountWords.test(item.name+' '+item.note)))discountLines.push(item);else normalizedItems.push(item)}
+  const compact=t=>String(t||'').replace(/(促銷|折扣|折讓|折價|店折|減免|優惠|折抵|商品|品項|金額|活動)/g,'').replace(/[^\p{L}\p{N}]/gu,'').toLowerCase();
+  const similarity=(a,b)=>{a=compact(a);b=compact(b);if(!a||!b)return 0;if(a.includes(b)||b.includes(a))return 100+Math.min(a.length,b.length);let score=0;for(let i=0;i<a.length-1;i++)if(b.includes(a.slice(i,i+2)))score+=2;for(const ch of new Set(a))if(b.includes(ch))score+=.2;return score};
+  for(const line of discountLines){const amount=Math.abs(Number(line._rawAmount||line.original_amount)||0);if(!amount)continue;let best=null,bestScore=-1;for(const item of normalizedItems){const score=similarity(line.name+' '+line.note,item.name+' '+item.spec);if(score>bestScore){bestScore=score;best=item}}if(!best&&normalizedItems.length)best=normalizedItems[normalizedItems.length-1];if(best){best.discount=Math.round((best.discount+amount)*100)/100;best.original_amount=Math.round((best.final_amount+best.discount)*100)/100;const label=(line.name||line.note||'收據折扣').replace(/^-+/, '').trim();best.note=[best.note,`${label} ${amount}`+(bestScore<1?'（折扣歸屬請確認）':'')].filter(Boolean).join('；')}}
+  for(const item of normalizedItems){delete item._rawAmount;if(item.discount>0){item.original_amount=Math.round((item.final_amount+item.discount)*100)/100;if(!item.note)item.note=`促銷折扣 ${item.discount}（原價 NT$${item.original_amount}）`}}
+  if(!normalizedItems.length)throw Error('只辨識到折扣，沒有辨識到可對應的商品。');
   const calculated=Math.round(normalizedItems.reduce((sum,x)=>sum+x.final_amount,0)*100)/100;
   const statedTotal=Number(result.receipt_total??result.total_amount??result.total);
   const hasTotal=Number.isFinite(statedTotal)&&statedTotal>0;
@@ -268,9 +276,10 @@ async function loadReceipts(){
   const note=document.createElement('div');note.className='tiny';note.textContent=r.status==='reviewed'?'已核對並存入商品紀錄。':(r.ocr_result?'AI 已辨識，請開啟結果核對。':(r.ocr_error?'上次辨識失敗：'+r.ocr_error:'照片已儲存，等待 AI 辨識。'));
   const acts=document.createElement('div');acts.className='actions';
   const add=document.createElement('button');add.className='btn red';add.textContent=r.ocr_result?'查看 AI 辨識結果':'AI 自動辨識';add.onclick=()=>r.ocr_result?showOcrReview(r.ocr_result,r.id):recognizeReceipt(r,add);
+  const rerun=document.createElement('button');rerun.className='btn secondary';rerun.textContent='重新 AI 辨識';rerun.onclick=()=>recognizeReceipt(r,rerun);
   const toggle=document.createElement('button');toggle.className='btn secondary';toggle.textContent=r.status==='reviewed'?'標回待整理':'標記已核對';toggle.onclick=async()=>{if(r.status!=='reviewed'&&!confirm('請先確認 AI 辨識明細及收據總額均正確。這只更改收據狀態。'))return;const {error}=await client.from('market_receipts').update({status:r.status==='reviewed'?'pending':'reviewed'}).eq('id',r.id).eq('user_id',user.id);if(error)alert(error.message);else await loadReceipts()};
   const del=document.createElement('button');del.className='btn secondary';del.textContent='刪除收據';del.onclick=async()=>{if(!confirm('確定永久刪除這張雲端收據？已建立的商品資料不受影響。'))return;const {error}=await client.from('market_receipts').delete().eq('id',r.id).eq('user_id',user.id);if(error){alert('刪除失敗：'+error.message);return}const result=await client.storage.from('market-receipts').remove([r.storage_path]);if(result.error)alert('收據紀錄已刪除，但照片刪除失敗：'+result.error.message);await loadReceipts()};
-  acts.append(add,toggle,del);content.append(meta,note,acts);card.append(img,content);list.append(card)
+  acts.append(add);if(r.ocr_result)acts.append(rerun);acts.append(toggle,del);content.append(meta,note,acts);card.append(img,content);list.append(card)
  }
 }
 function showReceipt(src){$('receiptFullImage').src=src;$('receiptViewer').showModal()}
