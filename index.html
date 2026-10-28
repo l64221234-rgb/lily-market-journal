@@ -142,21 +142,40 @@ $('saveReceiptBtn').onclick=async()=>{
  finally{btn.disabled=false;btn.textContent='上傳並自動辨識'}
 };
 let ocrDraft=null;
+const receiptAiWorker='https://lily-market-ai.l64221234.workers.dev/analyze';
 async function recognizeReceipt(receipt,button=null){
  if(!client||!user){alert('請先登入 GitHub，再使用 AI 辨識。');return}
- const target=button||$('saveReceiptBtn');const oldText=target?.textContent;
+ const target=button||$('saveReceiptBtn'),oldText=target?.textContent;
  if(target){target.disabled=true;target.textContent='AI 辨識中…'}
- $('photoStatus').textContent='AI 正在讀取收據，長張收據約需 20–60 秒，請不要關閉頁面。';
+ $('photoStatus').textContent='AI 正在讀取收據，請不要關閉頁面。';
  try{
-  const {data,error}=await client.functions.invoke('receipt-ocr',{body:{receipt_id:receipt.id}});
-  if(error){let detail=error.message;try{const body=await error.context?.json();detail=body?.error||detail}catch{}throw Error(detail)}
-  if(!data?.receipt?.items?.length)throw Error(data?.error||'AI 沒有讀到商品，請重新拍攝清楚完整的收據。');
-  $('photoStatus').textContent='AI 辨識完成，請核對商品、折讓與總額。';
-  showOcrReview(data.receipt,receipt.id);
-  await loadReceipts();
+  const {data:{session},error:sessionError}=await client.auth.getSession();
+  if(sessionError||!session?.access_token)throw Error('登入已過期，請重新登入 GitHub。');
+  const signed=await client.storage.from('market-receipts').createSignedUrl(receipt.storage_path,120);
+  if(signed.error)throw signed.error;
+  const photo=await fetch(signed.data.signedUrl);if(!photo.ok)throw Error('收據照片讀取失敗');
+  const blob=await photo.blob();if(blob.size>9_000_000)throw Error('圖片太大，請先縮小照片');
+  const b64=await new Promise((resolve,reject)=>{const rd=new FileReader();rd.onload=()=>resolve(String(rd.result).split(',')[1]);rd.onerror=()=>reject(Error('無法讀取照片'));rd.readAsDataURL(blob)});
+  const response=await fetch(receiptAiWorker,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},body:JSON.stringify({image:b64,mime:blob.type||'image/jpeg'})});
+  const result=await response.json();if(!response.ok)throw Error(result.detail||result.error||'原本的 AI 辨識服務發生錯誤');
+  const raw=Array.isArray(result.items)?result.items:[];if(!raw.length)throw Error('AI 沒有辨識出商品，請重新拍攝清楚完整的收據。');
+  const normalizedItems=raw.map(item=>{
+   const original=Number(item.original_amount??item.amount??item.unit_price??item.price??0)||0;
+   const discount=Math.max(0,Number(item.discount??item.discount_amount??0)||0);
+   const finalAmount=Number(item.final_amount??item.line_total??item.amount??item.unit_price??item.price??0)||0;
+   const category=cats.includes(item.category)?item.category:'其他';
+   const note=String(item.note||'').trim()|| (discount>0?`原價 NT$${original}；折讓 NT$${discount}`:'');
+   return {name:String(item.name||item.product_name||'').trim(),spec:String(item.spec||item.size||'').trim(),qty:Math.max(1,Math.round(Number(item.qty??item.quantity??1)||1)),original_amount:original,discount,final_amount:finalAmount,category,note};
+  });
+  const calculated=Math.round(normalizedItems.reduce((sum,x)=>sum+x.final_amount,0)*100)/100;
+  const statedTotal=Number(result.receipt_total??result.total_amount??result.total);
+  const hasTotal=Number.isFinite(statedTotal)&&statedTotal>0;
+  const parsed={store:String(result.store||'其他'),purchase_date:/^\d{4}-\d{2}-\d{2}$/.test(result.date||result.purchase_date||'')?(result.date||result.purchase_date):'',receipt_total:hasTotal?statedTotal:calculated,calculated_total:calculated,difference:hasTotal?Math.round((statedTotal-calculated)*100)/100:0,warning:hasTotal?'請逐項核對商品、折讓與總額。':'原本辨識服務未提供收據總額，請依照片確認或修改總金額。',items:normalizedItems};
+  await client.from('market_receipts').update({ocr_result:parsed,ocr_error:null,recognized_at:new Date().toISOString()}).eq('id',receipt.id).eq('user_id',user.id);
+  $('photoStatus').textContent='AI 辨識完成，請核對商品、折讓與總額。';showOcrReview(parsed,receipt.id);await loadReceipts();
  }catch(e){
-  $('photoStatus').textContent='AI 辨識失敗：'+(e.message||String(e));
-  alert('AI 辨識失敗：'+(e.message||String(e))+'\n\n照片仍保留在待整理收據，可稍後再按「AI 自動辨識」。');
+  const message=e.message||String(e);await client.from('market_receipts').update({ocr_error:message}).eq('id',receipt.id).eq('user_id',user.id);
+  $('photoStatus').textContent='AI 辨識失敗：'+message;alert('AI 辨識失敗：'+message+'\n\n照片仍保留在待整理收據，可稍後再試。');
  }finally{if(target){target.disabled=false;target.textContent=oldText||'AI 自動辨識'}}
 }
 function field(label,value,type='text',cls=''){
@@ -220,7 +239,7 @@ $('saveOcrItems').onclick=async()=>{
  const btn=$('saveOcrItems');btn.disabled=true;btn.textContent='正在儲存…';
  try{
   const {error}=await client.from('market_items').insert(records);if(error)throw error;
-  const {error:updateError}=await client.from('market_receipts').update({status:'reviewed',ocr_result:{...ocrDraft,store,date,receipt_total:check.receiptTotal,calculated_total:check.calculated,difference:check.difference,items:itemsToSave},ocr_error:null}).eq('id',activeReceiptId).eq('user_id',user.id);if(updateError)throw updateError;
+  const {error:updateError}=await client.from('market_receipts').update({status:'reviewed',ocr_result:{...ocrDraft,store,purchase_date:date,receipt_total:check.receiptTotal,calculated_total:check.calculated,difference:check.difference,items:itemsToSave},ocr_error:null}).eq('id',activeReceiptId).eq('user_id',user.id);if(updateError)throw updateError;
   $('ocrReview').close();activeReceiptId=null;await Promise.all([sync(),loadReceipts()]);alert('已儲存 '+records.length+' 個品項，且完成收據總額核對。');
  }catch(e){alert('儲存失敗：'+e.message)}finally{btn.disabled=false;btn.textContent='確認明細並全部儲存'}
 };
