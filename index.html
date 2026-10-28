@@ -156,8 +156,16 @@ async function recognizeReceipt(receipt,button=null){
   const photo=await fetch(signed.data.signedUrl);if(!photo.ok)throw Error('收據照片讀取失敗');
   const blob=await photo.blob();if(blob.size>9_000_000)throw Error('圖片太大，請先縮小照片');
   const b64=await new Promise((resolve,reject)=>{const rd=new FileReader();rd.onload=()=>resolve(String(rd.result).split(',')[1]);rd.onerror=()=>reject(Error('無法讀取照片'));rd.readAsDataURL(blob)});
-  const response=await fetch(receiptAiWorker,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},body:JSON.stringify({image:b64,mime:blob.type||'image/jpeg'})});
-  const result=await response.json();if(!response.ok)throw Error(result.detail||result.error||'原本的 AI 辨識服務發生錯誤');
+  let result=null,workerMessage='';
+  try{
+   const response=await fetch(receiptAiWorker,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},body:JSON.stringify({image:b64,mime:blob.type||'image/jpeg'})});
+   const body=await response.json();if(!response.ok)throw Error(body.detail||body.error||'原本的 AI 辨識服務發生錯誤');result=body;
+  }catch(workerError){
+   workerMessage=workerError.message||String(workerError);$('photoStatus').textContent='原本服務暫時不可用，正在切換備援辨識…';
+   const fallback=await client.functions.invoke('receipt-ocr',{body:{receipt_id:receipt.id}});
+   if(fallback.error){let detail=fallback.error.message;try{const body=await fallback.error.context?.json();detail=body?.error||detail}catch{}throw Error('原本服務：'+workerMessage+'；備援服務：'+detail)}
+   result=fallback.data?.receipt;if(!result)throw Error('原本服務：'+workerMessage+'；備援服務沒有回傳辨識結果');
+  }
   const raw=Array.isArray(result.items)?result.items:[];if(!raw.length)throw Error('AI 沒有辨識出商品，請重新拍攝清楚完整的收據。');
   const normalizedItems=raw.map(item=>{
    const original=Number(item.original_amount??item.amount??item.unit_price??item.price??0)||0;
