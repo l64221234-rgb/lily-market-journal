@@ -1,4 +1,13 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lily's Market — 商品價格手帖</title><style>:root{--bg:#faf5ec;--ink:#40372f;--red:#b97854;--blue:#8792a0;--line:#dfd0bd}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,'Noto Sans TC',sans-serif}main{max-width:850px;margin:auto;padding:20px 16px 90px}.mast{border-bottom:2px solid #242424;padding:14px 0 20px;position:relative}.eyebrow{font-size:11px;letter-spacing:3px;font-weight:700}.mast h1{font-family:Georgia,serif;font-size:clamp(32px,8vw,58px);line-height:1;margin:16px 0 10px;letter-spacing:-2px}.mast p{font-size:13px;color:#666;margin:0}.stamp{display:inline-block;transform:rotate(-7deg);border:2px solid var(--red);color:var(--red);padding:5px 9px;font-weight:800;font-size:11px;margin-top:16px}.hero{background:#f5e4ce;border:1px solid var(--line);padding:22px 18px;margin:22px 0;position:relative}.hero:after{content:'✳';position:absolute;right:15px;top:8px;color:var(--red);font-size:28px}.hero h2{font-size:25px;margin:0 0 8px}.hero p{font-size:13px;line-height:1.7;color:#666}.btn{border:1px solid var(--ink);background:#75685b;color:white;padding:13px 16px;font-weight:700;font-size:14px;cursor:pointer;border-radius:0}.btn.secondary{background:transparent;color:var(--ink)}.btn.red{background:var(--red);border-color:var(--red)}.actions{display:flex;gap:8px;flex-wrap:wrap}.sectiontitle{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--ink);padding-bottom:10px;margin:26px 0 16px}.sectiontitle h2{margin:0;font-size:19px}.sectiontitle span{font-size:11px;color:#777}.filters{display:grid;grid-template-columns:1fr 1fr;gap:10px}input,select{font:inherit;width:100%;border:1px solid var(--line);padding:12px;background:#fffaf5;color:var(--ink);border-radius:0}.wide{grid-column:1/-1}.cards{display:grid;gap:10px;margin-top:15px}.pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}.pagination button{min-width:92px}.pagination[hidden]{display:none}.result-status{font-size:12px;color:#666;margin:10px 2px 0}.result-status[hidden]{display:none}.item{background:#fffaf3;border:1px solid var(--line);padding:15px}.item h3{font-size:15px;margin:0 0 6px}.meta{font-size:12px;color:#666}.price{font-size:21px;font-weight:800;color:var(--red)}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.tag{font-size:11px;border:1px solid var(--line);padding:3px 6px;display:inline-block;margin:6px 5px 0 0}.notice{font-size:12px;color:#666;line-height:1.7;background:#fff;border-left:3px solid var(--blue);padding:13px;margin:14px 0}.preview{max-width:100%;max-height:260px;object-fit:contain;margin:12px auto;display:none}.empty{text-align:center;color:#777;padding:30px;border:1px dashed var(--line);font-size:13px}.tiny{font-size:11px;color:#888}dialog{border:1px solid var(--ink);width:min(95vw,520px);padding:20px;background:var(--bg)}dialog::backdrop{background:#0008}dialog h2{margin-top:0}label{font-size:12px;font-weight:700;display:block;margin:12px 0 5px}footer{font-size:11px;color:#777;margin-top:32px;border-top:1px solid var(--line);padding-top:15px}@media(min-width:650px){.filters{grid-template-columns:1fr 1fr 1fr}.wide{grid-column:auto}.cards{grid-template-columns:1fr 1fr}}/* 日雜拼貼：暖白、奶茶、杏桃與霧藍；小面積點綴 */
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Everyday Market Finds｜買いもの日記</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>:root{--bg:#faf5ec;--ink:#40372f;--red:#b97854;--blue:#8792a0;--line:#dfd0bd}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,'Noto Sans TC',sans-serif}main{max-width:850px;margin:auto;padding:20px 16px 90px}.mast{border-bottom:2px solid #242424;padding:14px 0 20px;position:relative}.eyebrow{font-size:11px;letter-spacing:3px;font-weight:700}.mast h1{font-family:Georgia,serif;font-size:clamp(32px,8vw,58px);line-height:1;margin:16px 0 10px;letter-spacing:-2px}.mast p{font-size:13px;color:#666;margin:0}.stamp{display:inline-block;transform:rotate(-7deg);border:2px solid var(--red);color:var(--red);padding:5px 9px;font-weight:800;font-size:11px;margin-top:16px}.hero{background:#f5e4ce;border:1px solid var(--line);padding:22px 18px;margin:22px 0;position:relative}.hero:after{content:'✳';position:absolute;right:15px;top:8px;color:var(--red);font-size:28px}.hero h2{font-size:25px;margin:0 0 8px}.hero p{font-size:13px;line-height:1.7;color:#666}.btn{border:1px solid var(--ink);background:#75685b;color:white;padding:13px 16px;font-weight:700;font-size:14px;cursor:pointer;border-radius:0}.btn.secondary{background:transparent;color:var(--ink)}.btn.red{background:var(--red);border-color:var(--red)}.actions{display:flex;gap:8px;flex-wrap:wrap}.sectiontitle{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--ink);padding-bottom:10px;margin:26px 0 16px}.sectiontitle h2{margin:0;font-size:19px}.sectiontitle span{font-size:11px;color:#777}.filters{display:grid;grid-template-columns:1fr 1fr;gap:10px}input,select{font:inherit;width:100%;border:1px solid var(--line);padding:12px;background:#fffaf5;color:var(--ink);border-radius:0}.wide{grid-column:1/-1}.cards{display:grid;gap:10px;margin-top:15px}.pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}.pagination button{min-width:92px}.pagination[hidden]{display:none}.result-status{font-size:12px;color:#666;margin:10px 2px 0}.result-status[hidden]{display:none}.item{background:#fffaf3;border:1px solid var(--line);padding:15px}.item h3{font-size:15px;margin:0 0 6px}.meta{font-size:12px;color:#666}.price{font-size:21px;font-weight:800;color:var(--red)}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.tag{font-size:11px;border:1px solid var(--line);padding:3px 6px;display:inline-block;margin:6px 5px 0 0}.notice{font-size:12px;color:#666;line-height:1.7;background:#fff;border-left:3px solid var(--blue);padding:13px;margin:14px 0}.preview{max-width:100%;max-height:260px;object-fit:contain;margin:12px auto;display:none}.empty{text-align:center;color:#777;padding:30px;border:1px dashed var(--line);font-size:13px}.tiny{font-size:11px;color:#888}dialog{border:1px solid var(--ink);width:min(95vw,520px);padding:20px;background:var(--bg)}dialog::backdrop{background:#0008}dialog h2{margin-top:0}label{font-size:12px;font-weight:700;display:block;margin:12px 0 5px}footer{font-size:11px;color:#777;margin-top:32px;border-top:1px solid var(--line);padding-top:15px}@media(min-width:650px){.filters{grid-template-columns:1fr 1fr 1fr}.wide{grid-column:auto}.cards{grid-template-columns:1fr 1fr}}/* 日雜拼貼：暖白、奶茶、杏桃與霧藍；小面積點綴 */
 body{background-image:radial-gradient(#e8dccc 0.7px,transparent 0.7px);background-size:19px 19px}
 .mast{background:#fffaf2;border:1px solid var(--line);border-bottom:3px solid #aa8b71;padding:26px 22px 27px;margin-top:12px;box-shadow:7px 7px 0 #eadfce;transform:rotate(-.25deg)}
 .mast:before{content:'LIFESTYLE  /  SHOPPING NOTES';position:absolute;right:15px;top:15px;font-size:9px;letter-spacing:1px;color:#998777;transform:rotate(3deg)}
@@ -11,13 +20,249 @@ body{background-image:radial-gradient(#e8dccc 0.7px,transparent 0.7px);backgroun
 .sectiontitle h2{font-family:Georgia,'Noto Serif TC',serif;color:#66584b}
 .notice{background:#fff9ef;border-left-color:#9aa6b0} .tag{background:#f6e8d7}
 @media(max-width:480px){main{padding:12px 13px 70px}.mast{padding:27px 16px 20px}.mast h1{font-size:40px}.hero{padding:20px 15px}.actions .btn{flex:1}}
-.cloud{background:#fffaf2;border:1px solid var(--line);padding:20px;margin:22px 0}.cloud h2{margin:0 0 8px}.cloud .status{color:#95684d;font-size:13px}.cloudgrid{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}.smallbtn{font-size:12px;padding:8px 10px}.item .actions{margin-top:10px}.item .actions button{font-size:12px;padding:7px 10px}@media(min-width:650px){.cloudgrid{grid-template-columns:1fr 1fr}}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script><style>
+.cloud{background:#fffaf2;border:1px solid var(--line);padding:20px;margin:22px 0}.cloud h2{margin:0 0 8px}.cloud .status{color:#95684d;font-size:13px}.cloudgrid{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}.smallbtn{font-size:12px;padding:8px 10px}.item .actions{margin-top:10px}.item .actions button{font-size:12px;padding:7px 10px}@media(min-width:650px){.cloudgrid{grid-template-columns:1fr 1fr}}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js">
+</script>
+<style>
 .receipt-panel{background:#fffaf2;border:1px solid var(--line);padding:18px;margin:20px 0}.receipt-panel h2{font-family:Georgia,serif;font-size:20px;margin:0 0 8px}.receipt-list{display:grid;gap:12px}.receipt-card{border:1px solid var(--line);background:#fffdf8;padding:13px;display:grid;grid-template-columns:86px 1fr;gap:13px}.receipt-card img{width:86px;height:110px;object-fit:cover;cursor:pointer}.receipt-card .meta{line-height:1.7}.receipt-card .actions{margin-top:8px}.receipt-card .btn{padding:8px;font-size:12px}.receipt-info{font-size:12px;color:#87634c;line-height:1.7}.receipt-modal{max-width:95vw;width:780px}.receipt-modal img{max-width:100%;max-height:72vh;object-fit:contain;display:block;margin:auto}.receipt-card button{white-space:normal}
 .ocr-status{margin:8px 0;padding:8px 10px;background:#f8eadc;border-left:3px solid var(--red);font-size:12px;line-height:1.6}.ocr-review{width:min(96vw,900px);max-height:92vh;overflow:auto}.ocr-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.ocr-summary>div{background:#fffaf3;border:1px solid var(--line);padding:10px}.ocr-items{display:grid;gap:10px}.ocr-item{background:#fffdf8;border:1px solid var(--line);padding:12px}.ocr-item-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}.ocr-item .full{grid-column:1/-1}.money-ok{color:#48764f;font-weight:800}.money-bad{color:#a13f33;font-weight:800}@media(max-width:600px){.ocr-item-grid{grid-template-columns:1fr 1fr}.ocr-item-grid .name-field,.ocr-item-grid .full{grid-column:1/-1}.ocr-summary{grid-template-columns:1fr 1fr}}
-</style></head><body><main><header class="mast"><div class="eyebrow">LILY'S PERSONAL PRICE ARCHIVE · 2026</div><h1>Market<br>Scrapbook.</h1><p>我的日常採買手帖　/　分類・月份・價格比較</p><span class="stamp">KEEP THE GOOD FINDS</span></header><section class="cloud"><div class="eyebrow">CLOUD / 雲端同步</div><h2>我的私人價格資料庫</h2><p id="cloudStatus" class="status">尚未連線，請填入 Supabase 公開連線設定。</p><div class="cloudgrid"><div><label>Supabase Project URL</label><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co"></div><div><label>Supabase publishable key（公開金鑰）</label><input id="supabaseKey" placeholder="sb_publishable_..."></div></div><div class="actions"><button class="btn secondary" id="connectBtn">儲存連線設定</button><button class="btn red" id="loginBtn">使用 GitHub 登入</button><button class="btn secondary" id="logoutBtn" hidden>登出</button><button class="btn secondary" id="syncBtn">重新同步</button></div><p class="tiny">僅使用 publishable / anon key，絕對不要填入 secret 或 service_role key。登入後資料才會儲存至 Supabase。</p></section><section class="hero"><div class="eyebrow">01 / QUICK CAPTURE</div><h2>拍張收據，留下好價格。</h2><p>用手機拍照或選取照片。上傳後會由 AI 讀取店家、日期、商品、數量、規格、金額與折讓，並先核對收據總額，再讓你確認。</p><div class="actions"><button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button><button class="btn secondary" id="manualBtn">手動補一筆</button></div><input type="file" id="photo" accept="image/*" capture="environment" hidden><img id="preview" class="preview" alt="收據預覽"><p id="photoStatus" class="tiny"></p><div class="actions"><button class="btn red" id="saveReceiptBtn" hidden>上傳並自動辨識</button></div><p class="receipt-info">AI 結果不會直接入帳；請在辨識結果中核對商品與折讓，確認總額相符後再儲存。</p></section><section class="receipt-panel"><h2>RECEIPT INBOX / 待整理收據</h2><p class="receipt-info" id="receiptCount">登入後顯示你的雲端收據。</p><div id="receiptList" class="receipt-list"></div></section><section><div class="sectiontitle"><h2>PRICE FINDER / 商品比價</h2><span>只比對已確認資料</span></div><div class="filters"><input id="search" class="wide" placeholder="搜尋商品、品牌或條碼"><select id="month"><option value="">所有月份</option></select><select id="category"><option value="">所有分類</option></select><select id="store"><option value="">所有店家</option><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select></div><p id="resultStatus" class="result-status" aria-live="polite" hidden></p><div id="results" class="cards" aria-live="polite"></div><div class="pagination" id="pagination" hidden><button class="btn secondary" id="prevPage" type="button">上一頁</button><span id="pageInfo" class="meta"></span><button class="btn secondary" id="nextPage" type="button">下一頁</button></div></section><section><div class="sectiontitle"><h2>ARCHIVE / 我的資料</h2><span>匯出備份</span></div><div class="notice">登入 GitHub 後，已確認的商品紀錄會同步至 Supabase。收據會先由 AI 辨識並核對金額，只有你確認的品項才會寫入商品紀錄。</div><div class="actions"><button class="btn secondary" id="export">匯出 JSON 備份</button><button class="btn secondary" id="import">匯入 JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="tiny" id="count"></p></section><footer>MARKET SCRAPBOOK · 個人價格資料庫 · 未確認品項不自動歸檔</footer></main><dialog id="receiptViewer" class="receipt-modal"><div class="actions"><button class="btn secondary" id="closeReceiptViewer">關閉照片</button></div><img id="receiptFullImage" alt="收據原始照片"></dialog><dialog id="ocrReview" class="ocr-review"><h2>AI 收據辨識結果</h2><p id="ocrMessage" class="ocr-status"></p><div id="ocrSummary" class="ocr-summary"></div><div id="ocrItems" class="ocr-items"></div><div class="actions" style="margin-top:18px"><button class="btn red" id="saveOcrItems" type="button">確認明細並全部儲存</button><button class="btn secondary" id="cancelOcr" type="button">先不儲存</button></div></dialog><dialog id="editor"><h2 id="editorTitle">新增已確認商品</h2><form method="dialog" id="form"><label>商品名稱 *</label><input id="name" required><label>日期 *</label><input id="date" type="date" required><label>店家 *</label><select id="editStore"><option>LOPIA</option><option>唐吉訶德</option><option>SOGO</option><option>全聯</option><option>家樂福</option><option>其他</option></select><label>分類 *</label><select id="editCategory"></select><label>規格</label><input id="spec" placeholder="例如 500ml"><label>條碼</label><input id="barcode" placeholder="可留空"><label>單價 NT$ *</label><input id="amount" type="number" min="0" step="0.01" required><label>數量 *</label><input id="qty" type="number" min="1" value="1" required><div class="actions" style="margin-top:20px"><button class="btn red" type="submit">確認儲存</button><button class="btn secondary" type="button" id="cancel">取消</button></div></form></dialog>
+</style>
+<style>
+:root{--bg:#f6edc5;--ink:#4b3022;--red:#8b6239;--blue:#638ca1;--line:#ddc78e;--mustard:#8b9643;--mustard-mid:#b5bb69;--mustard-light:#e7e8b2}
+body{background:radial-gradient(#d5c17e55 .7px,transparent .8px),linear-gradient(135deg,#fff4c9 0%,#f8edbd 58%,#f4e6ad 100%);background-size:18px 18px,auto;color:var(--ink);font-family:'M PLUS Rounded 1c','Noto Sans TC',system-ui,sans-serif}
+main{max-width:1240px;padding:24px 24px 80px}
+.mast{min-height:300px;overflow:hidden;background:linear-gradient(110deg,#fff9e8 0%,#fff6d6 58%,#f3e6b8 100%);border:1px solid #d9bf7e;border-bottom:4px solid #a9854e;border-radius:26px;padding:42px clamp(24px,5vw,64px) 40px;margin-top:12px;box-shadow:0 9px 22px #71532620;transform:none}
+.mast:before{content:'DAILY FINDS  /  MARKET JOURNAL';right:26px;top:22px;font-size:10px;letter-spacing:2px;color:#856c46;transform:none}
+.mast h1{position:relative;z-index:1;max-width:62%;font-family:'M PLUS Rounded 1c','Noto Sans TC',sans-serif;font-size:clamp(42px,7vw,82px);font-weight:800;line-height:1.02;letter-spacing:-1.5px;color:#4b2c1c;margin:18px 0 14px}
+.mast-art{position:absolute;right:1.5%;bottom:0;width:min(43%,470px);height:90%;z-index:0;overflow:visible}
+.mast p{position:relative;z-index:1;font-size:15px;color:#765b42}
+.stamp{position:relative;z-index:1;border:1px solid #a77c42;border-radius:7px;background:linear-gradient(#f1dba9,#e3c486);color:#604222;transform:rotate(-3deg);box-shadow:0 3px 0 #c8a36c}
+.cloud,.hero,.receipt-panel{background:#fffaf0;border:1px solid #ddc78e;border-radius:22px;padding:clamp(20px,3vw,34px);margin:24px 0;box-shadow:0 6px 16px #70552a16;transform:none}
+.cloud{position:relative;background:linear-gradient(135deg,#fffdf5,#fff8e5)}
+.cloud .status{color:#567c55;font-size:14px}
+.cloudgrid{gap:14px;margin:16px 0}
+input,select{border-radius:12px;background:#fffdf8;border-color:#dccba5}
+.hero{position:relative;background:linear-gradient(135deg,#fff9e7,#fff3d2);border-style:solid;overflow:hidden}
+.hero:after{content:none}
+.hero-art{position:absolute;right:18px;bottom:10px;width:220px;max-width:28%;height:auto;z-index:0;pointer-events:none}
+.hero>*:not(.hero-art){position:relative;z-index:1}
+.hero h2,.cloud h2,.receipt-panel h2{font-family:'M PLUS Rounded 1c','Noto Sans TC',sans-serif;font-size:21px;font-weight:700;color:#4b2c1c;margin:0 0 18px}
+.wood-tag{position:relative;display:inline-flex;align-items:center;min-height:54px;padding:9px 22px 9px 32px;background:linear-gradient(180deg,#f3d79e,#dfba72);border:2px solid #b3874d;border-radius:10px 6px 10px 6px;box-shadow:inset 0 1px #fff8e1,0 3px 0 #caa56b;color:#4b2c1c!important;text-decoration:none}
+.wood-tag:before{content:'';position:absolute;left:13px;top:50%;width:7px;height:7px;border:2px solid #946b3d;border-radius:50%;transform:translateY(-50%);background:#f9e8bd}
+.btn{border-radius:14px;border:1px solid #7e8b3c;background:#8b9643;color:#fffaf0;padding:12px 18px;font-family:inherit;font-size:14px;box-shadow:0 3px 0 #6b7535;transition:transform .15s,filter .15s}
+.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.btn:active{transform:translateY(1px);box-shadow:0 1px 0 #6b7535}
+.btn.red{background:#8b9643;border-color:#7e8b3c;color:#fffaf0}
+.btn.secondary{background:#e7e8b2;border-color:#c0c47a;color:#4b4b29;box-shadow:0 3px 0 #c0c47a}
+.cloud #connectBtn,.cloud #loginBtn{background:#8b9643;border-color:#7e8b3c;color:#fffaf0}
+.cloud #logoutBtn{background:#eff0c9;border-color:#cdd18e;color:#4b4b29;box-shadow:0 3px 0 #cdd18e}
+.cloud #syncBtn{background:#b5bb69;border-color:#a0a750;color:#414522;box-shadow:0 3px 0 #969d4c}
+.receipt-panel h2{margin-bottom:14px}
+.receipt-info,.hero p{color:#725f4e;line-height:1.8}
+.sectiontitle{border-bottom-color:#b99b64}
+.sectiontitle h2{font-family:'M PLUS Rounded 1c','Noto Sans TC',sans-serif;color:#4b3022}
+.item{background:#fffaf0;border-color:#dfcca2;border-radius:16px;box-shadow:0 4px 12px #6c512018}
+.tag{border-color:#c9b27e;background:#f6edc5;border-radius:999px;padding:4px 9px}
+.price{color:#8b6239}
+.notice{border-left-color:#8b9643;background:#fff9e8;border-radius:0 12px 12px 0}
+.receipt-card{border-radius:14px;border-color:#e1d2b0;background:#fffdf8}
+dialog{border-color:#b99b64;border-radius:20px}
+footer{border-top-color:#d6c28b}
+@media(min-width:700px){.cloudgrid{grid-template-columns:1fr 1fr}.hero{padding-right:240px}}
+@media(max-width:650px){main{padding:12px 13px 64px}.mast{min-height:240px;padding:42px 20px 26px;border-radius:20px}.mast h1{max-width:100%;font-size:clamp(40px,12vw,58px)}.mast:before{right:12px;top:14px;font-size:8px}.mast-art{opacity:.22;width:68%;height:58%;right:-5%;}.hero{padding:20px 15px}.hero-art{display:none}.wood-tag{font-size:19px;min-height:48px}.cloud,.hero,.receipt-panel{padding:20px 16px}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<main>
+<header class="mast">
+<div class="eyebrow">EVERYDAY FINDS · MARKET JOURNAL</div>
+<h1>Everyday<br>Market Finds</h1>
+<p>我的日常採買手帖　/　分類・月份・價格比較</p>
+<span class="stamp">KEEP THE GOOD FINDS</span>
+<svg class="mast-art" viewBox="0 0 440 260" role="img" aria-label="日系手繪花朵與水果靜物">
+<defs><pattern id="check" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#fff8e8"/><rect width="12" height="12" fill="#b8ced0" opacity=".65"/><rect x="12" y="12" width="12" height="12" fill="#b8ced0" opacity=".65"/></pattern></defs>
+<path d="M8 213 Q110 203 220 214 T432 210 L438 260 H4Z" fill="url(#check)" stroke="#b99b64" stroke-width="2"/>
+<path d="M220 132 Q217 181 235 199 L298 199 Q314 179 303 132Z" fill="#f7f1dc" stroke="#8f7355" stroke-width="3" stroke-linejoin="round"/>
+<path d="M250 137 Q244 98 220 73 M268 137 Q282 91 303 68 M259 137 Q267 93 260 50 M242 138 Q225 112 200 106" fill="none" stroke="#718653" stroke-width="4" stroke-linecap="round"/>
+<path d="M229 104 Q207 85 194 97 Q207 117 230 112 M283 104 Q302 81 319 91 Q308 116 282 112 M255 87 Q239 66 246 51 Q267 65 261 89 M242 133 Q222 124 213 134 Q225 147 245 141" fill="#9aa66a" stroke="#718653" stroke-width="2.5"/>
+<g fill="#fffdf4" stroke="#d89a4d" stroke-width="2"><circle cx="220" cy="71" r="8"/><circle cx="211" cy="65" r="7"/><circle cx="229" cy="63" r="7"/><circle cx="218" cy="54" r="7"/><circle cx="304" cy="67" r="8"/><circle cx="295" cy="59" r="7"/><circle cx="313" cy="58" r="7"/><circle cx="304" cy="49" r="7"/><circle cx="260" cy="49" r="8"/><circle cx="251" cy="41" r="7"/><circle cx="269" cy="40" r="7"/><circle cx="260" cy="31" r="7"/></g>
+<g fill="#e2a34a" stroke="#a9743d" stroke-width="2.5"><circle cx="120" cy="180" r="27"/><circle cx="165" cy="175" r="25"/><circle cx="144" cy="145" r="23"/></g>
+<path d="M119 152q-4-12 6-15 M164 150q-3-11 7-14 M142 123q-2-10 8-13" fill="none" stroke="#718653" stroke-width="3" stroke-linecap="round"/>
+<path d="M86 207 Q137 223 190 205 Q183 236 136 240 Q99 235 86 207Z" fill="#d6a76c" stroke="#8f6944" stroke-width="3"/>
+<path d="M88 210 Q138 224 188 208" fill="none" stroke="#f1d5a3" stroke-width="3"/>
+</svg>
+</header>
+<section class="cloud">
+<div class="eyebrow">CLOUD / 雲端同步</div>
+<h2 class="wood-tag">買いもの日記</h2>
+<p id="cloudStatus" class="status">尚未連線，請填入 Supabase 公開連線設定。</p>
+<div class="cloudgrid">
+<div>
+<label>Supabase Project URL</label>
+<input id="supabaseUrl" placeholder="https://xxxxx.supabase.co">
+</div>
+<div>
+<label>Supabase publishable key（公開金鑰）</label>
+<input id="supabaseKey" placeholder="sb_publishable_...">
+</div>
+</div>
+<div class="actions">
+<button class="btn secondary" id="connectBtn">儲存連線設定</button>
+<button class="btn red" id="loginBtn">使用 GitHub 登入</button>
+<button class="btn secondary" id="logoutBtn" hidden>登出</button>
+<button class="btn secondary" id="syncBtn">重新同步</button>
+</div>
+<p class="tiny">僅使用 publishable / anon key，絕對不要填入 secret 或 service_role key。登入後資料才會儲存至 Supabase。</p>
+</section>
+<section class="hero">
+<div class="eyebrow">01 / QUICK CAPTURE</div>
+<h2 class="wood-tag">今日の買物</h2>
+<p>用手機拍照或選取照片。上傳後會由 AI 讀取店家、日期、商品、數量、規格、金額與折讓，並先核對收據總額，再讓你確認。</p>
+<div class="actions">
+<button class="btn red" id="cameraBtn">＋ 拍照 / 上傳收據</button>
+<button class="btn secondary" id="manualBtn">手動補一筆</button>
+</div>
+<input type="file" id="photo" accept="image/*" capture="environment" hidden>
+<img id="preview" class="preview" alt="收據預覽">
+<p id="photoStatus" class="tiny">
+</p>
+<div class="actions">
+<button class="btn red" id="saveReceiptBtn" hidden>上傳並自動辨識</button>
+</div>
+<p class="receipt-info">AI 結果不會直接入帳；請在辨識結果中核對商品與折讓，確認總額相符後再儲存。</p>
+<svg class="hero-art" viewBox="0 0 260 150" aria-hidden="true">
+<path d="M132 67 L222 67 L244 139 L115 139Z" fill="#e8d7b4" stroke="#997a51" stroke-width="3" stroke-linejoin="round"/>
+<path d="M151 69 Q155 27 183 31 Q209 34 211 69" fill="none" stroke="#997a51" stroke-width="5" stroke-linecap="round"/>
+<path d="M142 81 Q166 89 232 80" fill="none" stroke="#c5a574" stroke-width="2"/>
+<path d="M151 74 Q140 47 146 30 M162 74 Q163 39 178 23 M179 74 Q190 40 207 34" fill="none" stroke="#718653" stroke-width="4" stroke-linecap="round"/>
+<path d="M144 50 Q126 38 122 51 Q133 65 150 59 M180 49 Q178 27 192 22 Q201 38 184 56 M201 54 Q213 36 226 43 Q220 59 202 62" fill="#9aa66a" stroke="#718653" stroke-width="2"/>
+<path d="M18 73 Q18 64 28 64 H105 Q115 64 115 74 V124 Q115 133 105 133 H27 Q18 133 18 124Z" fill="#b8aaa0" stroke="#69584a" stroke-width="3"/>
+<path d="M38 64 L45 51 H76 L83 64" fill="#c8b8a7" stroke="#69584a" stroke-width="3" stroke-linejoin="round"/>
+<circle cx="70" cy="98" r="23" fill="#ddd4c5" stroke="#69584a" stroke-width="4"/><circle cx="70" cy="98" r="13" fill="#8a9694" stroke="#69584a" stroke-width="3"/><circle cx="100" cy="77" r="4" fill="#e0a750"/>
+<path d="M121 143 Q174 150 245 143" fill="none" stroke="#9a754e" stroke-width="3" stroke-linecap="round"/>
+</svg>
+</section>
+<section class="receipt-panel">
+<h2>RECEIPT INBOX / 待整理收據</h2>
+<p class="receipt-info" id="receiptCount">登入後顯示你的雲端收據。</p>
+<div id="receiptList" class="receipt-list">
+</div>
+</section>
+<section>
+<div class="sectiontitle">
+<h2>PRICE FINDER / 商品比價</h2>
+<span>只比對已確認資料</span>
+</div>
+<div class="filters">
+<input id="search" class="wide" placeholder="搜尋商品、品牌或條碼">
+<select id="month">
+<option value="">所有月份</option>
+</select>
+<select id="category">
+<option value="">所有分類</option>
+</select>
+<select id="store">
+<option value="">所有店家</option>
+<option>LOPIA</option>
+<option>唐吉訶德</option>
+<option>SOGO</option>
+<option>全聯</option>
+<option>家樂福</option>
+<option>其他</option>
+</select>
+</div>
+<p id="resultStatus" class="result-status" aria-live="polite" hidden>
+</p>
+<div id="results" class="cards" aria-live="polite">
+</div>
+<div class="pagination" id="pagination" hidden>
+<button class="btn secondary" id="prevPage" type="button">上一頁</button>
+<span id="pageInfo" class="meta">
+</span>
+<button class="btn secondary" id="nextPage" type="button">下一頁</button>
+</div>
+</section>
+<section>
+<div class="sectiontitle">
+<h2>ARCHIVE / 我的資料</h2>
+<span>匯出備份</span>
+</div>
+<div class="notice">登入 GitHub 後，已確認的商品紀錄會同步至 Supabase。收據會先由 AI 辨識並核對金額，只有你確認的品項才會寫入商品紀錄。</div>
+<div class="actions">
+<button class="btn secondary" id="export">匯出 JSON 備份</button>
+<button class="btn secondary" id="import">匯入 JSON</button>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+</div>
+<p class="tiny" id="count">
+</p>
+</section>
+<footer>EVERYDAY MARKET FINDS · 買いもの日記 · 未確認品項不自動歸檔</footer>
+</main>
+<dialog id="receiptViewer" class="receipt-modal">
+<div class="actions">
+<button class="btn secondary" id="closeReceiptViewer">關閉照片</button>
+</div>
+<img id="receiptFullImage" alt="收據原始照片">
+</dialog>
+<dialog id="ocrReview" class="ocr-review">
+<h2>AI 收據辨識結果</h2>
+<p id="ocrMessage" class="ocr-status">
+</p>
+<div id="ocrSummary" class="ocr-summary">
+</div>
+<div id="ocrItems" class="ocr-items">
+</div>
+<div class="actions" style="margin-top:18px">
+<button class="btn red" id="saveOcrItems" type="button">確認明細並全部儲存</button>
+<button class="btn secondary" id="cancelOcr" type="button">先不儲存</button>
+</div>
+</dialog>
+<dialog id="editor">
+<h2 id="editorTitle">新增已確認商品</h2>
+<form method="dialog" id="form">
+<label>商品名稱 *</label>
+<input id="name" required>
+<label>日期 *</label>
+<input id="date" type="date" required>
+<label>店家 *</label>
+<select id="editStore">
+<option>LOPIA</option>
+<option>唐吉訶德</option>
+<option>SOGO</option>
+<option>全聯</option>
+<option>家樂福</option>
+<option>其他</option>
+</select>
+<label>分類 *</label>
+<select id="editCategory">
+</select>
+<label>規格</label>
+<input id="spec" placeholder="例如 500ml">
+<label>條碼</label>
+<input id="barcode" placeholder="可留空">
+<label>單價 NT$ *</label>
+<input id="amount" type="number" min="0" step="0.01" required>
+<label>數量 *</label>
+<input id="qty" type="number" min="1" value="1" required>
+<div class="actions" style="margin-top:20px">
+<button class="btn red" type="submit">確認儲存</button>
+<button class="btn secondary" type="button" id="cancel">取消</button>
+</div>
+</form>
+</dialog>
 <script>
 const $=id=>document.getElementById(id);
-const cats=['肉品','海鮮','蔬菜水果','咖啡／飲料','餅乾零食','乳製品','冷凍食品','調味料','日用品','其他'];
+const cats=['肉品','海鮮','蔬菜水果','咖啡／飲料','酒','餅乾零食','乳製品','冷凍調理品','調味品','日用品','其他'];
+const normalizeStore=value=>/日商樂比亞股份有限公司台灣分公司/.test(String(value||''))?'LOPIA':String(value||'其他');
+const normalizeCategory=(name,value)=>{
+ const n=String(name||''),old=String(value||''),c=old==='調味料'?'調味品':old==='冷凍食品'?'冷凍調理品':old;
+ if(/^(酒|酒類)$|啤酒|葡萄酒|紅酒|白酒|清酒|梅酒|威士忌|燒酎|燒酒|伏特加|琴酒|白蘭地|氣泡酒|調酒|料理酒|米酒|高粱酒|紹興酒/i.test(n))return '酒';
+ if(/非籠飼.*蛋|動物福利蛋|紅蛋|白蛋|雞蛋|鴨蛋|蛋品/.test(n))return '其他';
+ if(/拉麵|泡麵|即食麵|杯麵|泡麵|ramen/i.test(n))return '其他';
+ if(/高湯|湯底|鍋底|泡菜|キムチ|kimchi|調味料|醬油|味噌|沙茶|醬料/i.test(n))return '調味品';
+ if(c==='冷凍調理品'&&/雞排|雞肉|雞腿|雞胸|雞翅|豬肉|牛肉|羊肉|肉片|肉排/.test(n))return '肉品';
+ return cats.includes(c)?c:'其他';
+};
 const localKey='lily-market-scrapbook-v1',configKey='lily-market-cloud-config-v1';
 let items=[],client=null,user=null,editingId=null;
 let resultPage=0;
@@ -66,7 +311,7 @@ function render(){
   $('count').textContent='已確認商品紀錄：'+items.length+' 筆'+(user?'（Supabase 雲端）':'（本機）');
   return;
  }
- const f=items.filter(x=>([x.name,x.barcode,x.spec,x.store,x.category].join(' ').toLowerCase().includes(q))&&(!$('month').value||x.date?.startsWith($('month').value))&&(!$('category').value||x.category===$('category').value)&&(!$('store').value||x.store===$('store').value)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ const f=items.filter(x=>([x.name,x.barcode,x.spec,x.store,normalizeCategory(x.name,x.category)].join(' ').toLowerCase().includes(q))&&(!$('month').value||x.date?.startsWith($('month').value))&&(!$('category').value||normalizeCategory(x.name,x.category)===$('category').value)&&(!$('store').value||x.store===$('store').value)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
  const pageCount=Math.ceil(f.length/pageSize);
  $('resultStatus').hidden=false;
  if(resultPage>=pageCount)resultPage=Math.max(0,pageCount-1);
@@ -77,7 +322,7 @@ function render(){
   const h=document.createElement('h3');h.textContent=x.name;
   const meta=document.createElement('div');meta.className='meta';meta.textContent=[x.date,x.store,x.spec,x.qty?'數量 '+x.qty:''].filter(Boolean).join(' · ');
   const p=document.createElement('div');p.className='row';
-  const left=document.createElement('span');left.className='tag';left.textContent=x.category;
+  const left=document.createElement('span');left.className='tag';left.textContent=normalizeCategory(x.name,x.category);
   const right=document.createElement('span');right.className='price';right.textContent='NT$'+Number(x.amount).toLocaleString('zh-TW');
   p.append(left,right);e.append(h,meta,p);if(x.note){const n=document.createElement('div');n.className='tiny';n.textContent=x.note;e.append(n)}
   if(user){const actions=document.createElement('div');actions.className='actions';
@@ -100,7 +345,7 @@ function openEditor(x=null){
  editingId=x?.id||null;$('editorTitle').textContent=x?'修改已確認商品':'新增已確認商品';
  $('form').reset();$('date').value=x?.date||new Date().toLocaleDateString('en-CA');
  for(const field of ['name','spec','barcode','amount','qty'])if(x)$(field).value=x[field]??'';
- if(x){$('editStore').value=x.store;$('editCategory').value=x.category}
+ if(x){$('editStore').value=x.store;$('editCategory').value=normalizeCategory(x.name,x.category)}
  $('editor').showModal();
 }
 $('manualBtn').onclick=()=>openEditor();
@@ -173,7 +418,7 @@ async function recognizeReceipt(receipt,button=null){
    let discount=Math.max(0,Number(item.discount??item.discount_amount??0)||0),finalAmount=rawAmount;
    if(!discount&&finalAmount>=0){const m=note.match(/(?:促銷|折扣|折價|折讓|店折|減免)\s*[:：$NT＄]*\s*(\d+(?:\.\d+)?)/i);if(m)discount=Number(m[1])}
    const suppliedOriginal=Number(item.original_amount),original=Number.isFinite(suppliedOriginal)&&suppliedOriginal>0?suppliedOriginal:Math.round((finalAmount+discount)*100)/100;
-   return {name,spec:String(item.spec||item.size||'').trim(),qty:Math.max(1,Math.round(Number(item.qty??item.quantity??1)||1)),original_amount:original,discount,final_amount:finalAmount,category:cats.includes(item.category)?item.category:'其他',note,_rawAmount:rawAmount};
+   return {name,spec:String(item.spec||item.size||'').trim(),qty:Math.max(1,Math.round(Number(item.qty??item.quantity??1)||1)),original_amount:original,discount,final_amount:finalAmount,category:normalizeCategory(name,item.category),note,_rawAmount:rawAmount};
   });
   const discountWords=/(折扣|折讓|折價|促銷|店折|減免|優惠|折抵)/;
   const discountLines=[],normalizedItems=[];
@@ -186,7 +431,7 @@ async function recognizeReceipt(receipt,button=null){
   const calculated=Math.round(normalizedItems.reduce((sum,x)=>sum+x.final_amount,0)*100)/100;
   const statedTotal=Number(result.receipt_total??result.total_amount??result.total);
   const hasTotal=Number.isFinite(statedTotal)&&statedTotal>0;
-  const parsed={store:String(result.store||'其他'),purchase_date:/^\d{4}-\d{2}-\d{2}$/.test(result.date||result.purchase_date||'')?(result.date||result.purchase_date):'',receipt_total:hasTotal?statedTotal:calculated,calculated_total:calculated,difference:hasTotal?Math.round((statedTotal-calculated)*100)/100:0,warning:hasTotal?'請逐項核對商品、折讓與總額。':'原本辨識服務未提供收據總額，請依照片確認或修改總金額。',items:normalizedItems};
+  const parsed={store:normalizeStore(result.store),purchase_date:/^\d{4}-\d{2}-\d{2}$/.test(result.date||result.purchase_date||'')?(result.date||result.purchase_date):'',receipt_total:hasTotal?statedTotal:calculated,calculated_total:calculated,difference:hasTotal?Math.round((statedTotal-calculated)*100)/100:0,warning:hasTotal?'請逐項核對商品、折讓與總額。':'原本辨識服務未提供收據總額，請依照片確認或修改總金額。',items:normalizedItems};
   await client.from('market_receipts').update({ocr_result:parsed,ocr_error:null,recognized_at:new Date().toISOString()}).eq('id',receipt.id).eq('user_id',user.id);
   $('photoStatus').textContent='AI 辨識完成，請核對商品、折讓與總額。';showOcrReview(parsed,receipt.id);await loadReceipts();
  }catch(e){
@@ -206,7 +451,9 @@ function showOcrReview(result,receiptId){
  const store=field('店家',ocrDraft.store||'其他');store.input.id='ocrStore';
  const date=field('購買日期',ocrDraft.purchase_date||new Date().toLocaleDateString('en-CA'),'date');date.input.id='ocrDate';
  const total=field('收據總金額',Number(ocrDraft.receipt_total||0),'number');total.input.id='ocrTotal';total.input.step='0.01';
- const check=document.createElement('div');check.innerHTML='<label>金額核對</label><div id="ocrCheck"></div>';
+ const check=document.createElement('div');check.innerHTML='<label>金額核對</label>
+<div id="ocrCheck">
+</div>';
  summary.append(store.wrap,date.wrap,total.wrap,check);
  const root=$('ocrItems');root.replaceChildren();
  ocrDraft.items.forEach((item,index)=>{
@@ -294,4 +541,6 @@ $('importFile').onchange=async e=>{try{const data=JSON.parse(await e.target.file
  const {error}=await client.from('market_items').insert(clean);if(error)throw error;await sync();alert('已匯入 '+clean.length+' 筆');
  }catch(err){alert('無法匯入：'+err.message)}finally{e.target.value=''}};
 (async()=>{try{const saved=JSON.parse(localStorage.getItem(configKey)||'null');if(saved){$('supabaseUrl').value=saved.url||'';$('supabaseKey').value=saved.key||'';if(configure())await authRefresh()}else render()}catch(err){status('初始化失敗：'+err.message);render()}})();
-</script></body></html>
+</script>
+</body>
+</html>
